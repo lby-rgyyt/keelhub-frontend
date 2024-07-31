@@ -32,10 +32,11 @@ function App() {
           }
         />
         <Route path="/profile" element={<Profile />} />
-        <Route
+        <Route path="/Dashboard" element={<Dashboard />} />
+        {/* <Route
           path="/Dashboard"
           element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
-        />
+        /> */}
       </Routes>
     </div>
   );
