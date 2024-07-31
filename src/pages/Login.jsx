@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // 使用 react-router-dom 进行导航
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // 用于显示错误信息
-  const navigate = useNavigate(); // 用于导航
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // 检查 localStorage 中是否存在 token
     const token = localStorage.getItem("token");
     if (token) {
-      // 如果存在 token，则自动重定向到 /home
-      navigate("/home");
+      navigate("/");
     }
   }, [navigate]);
 
@@ -24,20 +22,19 @@ function Login() {
       const response = await axios.post(
         "http://localhost:3001/api/auth/login",
         {
-          email,
+          username,
           password,
         }
       );
 
-      // 提取 token
-      const { token } = response.data;
+      const { token, user } = response.data;
+      console.log(response.data);
 
-      // 保存 token 到 localStorage
       localStorage.setItem("token", token);
+      localStorage.setItem("currentUser", JSON.stringify(user));
 
-      // 清除错误信息
       setError("");
-      navigate("/home"); // 登录成功后重定向到 /home
+      navigate("/dashboard");
     } catch (error) {
       if (error.response && error.response.data) {
         setError(error.response.data.error || "An error occurred");
@@ -53,12 +50,12 @@ function Login() {
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="email">Email:</label>
+          <label htmlFor="username">username:</label>
           <input
-            type="text"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div>

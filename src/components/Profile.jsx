@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import UserInfoModal from './UserInfoModal';
-import VolunteerInfoModal from './VolunteerInfoModal';
-import '../assets/profile.css';
+import React, { useState } from "react";
+import UserInfoModal from "./UserInfoModal";
+import VolunteerInfoModal from "./VolunteerInfoModal";
+import "../assets/profile.css";
 
 const Profile = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isVolunteerModalOpen, setIsVolunteerModalOpen] = useState(false);
-  const [message, setMessage] = useState('');
-
+  const [message, setMessage] = useState("");
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   const handleUserSave = () => {
-    setMessage('User info saved successfully');
+    setMessage("User info saved successfully");
   };
 
   const handleVolunteerSave = () => {
-    setMessage('Volunteer info saved successfully');
+    setMessage("Volunteer info saved successfully");
   };
 
   const handleOpenUserModal = () => {
@@ -41,14 +41,24 @@ const Profile = () => {
         isOpen={isUserModalOpen}
         onRequestClose={handleCloseUserModal}
         onSave={handleUserSave}
+        currentUser={currentUser}
       />
-      <button onClick={handleOpenVolunteerModal}>Edit Volunteer Info</button>
-      <VolunteerInfoModal
-        userId={1}
-        isOpen={isVolunteerModalOpen}
-        onRequestClose={handleCloseVolunteerModal}
-        onSave={handleVolunteerSave}
-      />
+      {currentUser.role === "volunteer" ? (
+        <div>
+          <button onClick={handleOpenVolunteerModal}>
+            Edit Volunteer Info
+          </button>
+          <VolunteerInfoModal
+            userId={1}
+            isOpen={isVolunteerModalOpen}
+            onRequestClose={handleCloseVolunteerModal}
+            onSave={handleVolunteerSave}
+            currentUser={currentUser}
+          />
+        </div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };
