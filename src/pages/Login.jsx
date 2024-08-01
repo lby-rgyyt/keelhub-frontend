@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { UserContext } from "../context/UserContext"; 
+import { UserContext } from "../context/UserContext";
 
 function Login() {
-  const { login } = useContext(UserContext);
+  const { currentUser, updateCurrentUserStatus, login } =
+    useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -33,6 +34,7 @@ function Login() {
 
       setError("");
       login(user, token);
+
       navigate("/dashboard");
     } catch (error) {
       if (error.response && error.response.data) {

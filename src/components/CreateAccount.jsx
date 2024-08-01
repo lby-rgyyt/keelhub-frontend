@@ -33,6 +33,7 @@ const CreateAccount = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData);
 
     try {
       const token = localStorage.getItem("token");
@@ -46,6 +47,22 @@ const CreateAccount = () => {
           },
         }
       );
+
+      if (formData.role === "volunteer") {
+        const newVolunteer = {
+          volunteer_id: response.data.data.id,
+          skills: [],
+        };
+        const newResponse = await axios.post(
+          "http://localhost:3001/api/volunteers",
+          newVolunteer,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
 
       setSuccess("User created successfully!");
 

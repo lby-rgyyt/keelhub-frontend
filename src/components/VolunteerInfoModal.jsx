@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
 import "../assets/volunteerInfoModal.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
-const VolunteerInfoModal = ({ userId, isOpen, onRequestClose, currentUser }) => {
+const VolunteerInfoModal = ({
+  userId,
+  isOpen,
+  onRequestClose,
+  isManual,
+  setIsVolunteerModalOpen,
+}) => {
+  const { currentUser } = useContext(UserContext);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -18,11 +26,14 @@ const VolunteerInfoModal = ({ userId, isOpen, onRequestClose, currentUser }) => 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/api/volunteers/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `http://localhost:3001/api/volunteers/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const { skills, time_committed_per_week, status } = response.data;
         setVolunteerInfo({ skills, time_committed_per_week, status });
         setIsNewVolunteer(false); // Volunteer exists
@@ -65,39 +76,58 @@ const VolunteerInfoModal = ({ userId, isOpen, onRequestClose, currentUser }) => 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const confirmation = window.confirm("Are you sure you want to update your information?");
+    const confirmation = window.confirm(
+      "Are you sure you want to update your information?"
+    );
     if (!confirmation) return;
+
+    // Update hasLoggedIn status if needed
+    if (!currentUser.hasLoggedIn) {
+      await axios.put(
+        `http://localhost:3001/api/users/${userId}`,
+        { hasLoggedIn: true },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    }
 
     onRequestClose(); // Close the modal immediately after confirmation
 
     try {
-      if (isNewVolunteer) {
-        // Create new volunteer info
-        await axios.post(`http://localhost:3001/api/volunteers`, { userId, ...volunteerInfo }, {
+      // if (isNewVolunteer) {
+      // Create new volunteer info
+      // await axios.post(`http://localhost:3001/api/volunteers`, { userId, ...volunteerInfo }, {
+      //   headers: {
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // });
+      // } else {
+      // Update existing volunteer info
+      // await axios.put(
+      //   `http://localhost:3001/api/volunteers/${userId}`,
+      //   volunteerInfo,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   }
+      // );
+      // }
+      const response = await axios.put(
+        `http://localhost:3001/api/volunteers/${userId}`,
+        volunteerInfo,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
-      } else {
-        // Update existing volunteer info
-        await axios.put(`http://localhost:3001/api/volunteers/${userId}`, volunteerInfo, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
+        }
+      );
 
-      // Update hasLoggedIn status if needed
-      if (!currentUser.hasLoggedIn) {
-        await axios.put(`http://localhost:3001/api/users/${userId}`, { hasLoggedIn: true }, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
-
-      console.log("Volunteer info updated successfully");
-      navigate("/dashboard");
+      console.log("Volunteer info updated successfully", response.data);
+      // navigate("/dashboard");
     } catch (error) {
       console.log("Error updating volunteer info: ", error);
     }
@@ -167,6 +197,15 @@ const VolunteerInfoModal = ({ userId, isOpen, onRequestClose, currentUser }) => 
           </div>
           <button type="submit">Update Volunteer Info</button>
         </form>
+        {isManual && (
+          <button
+            onClick={() => {
+              setIsVolunteerModalOpen(false);
+            }}
+          >
+            close
+          </button>
+        )}
       </div>
     </Modal>
   );

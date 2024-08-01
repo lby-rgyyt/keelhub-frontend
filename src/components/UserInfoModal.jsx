@@ -3,16 +3,19 @@ import Modal from "react-modal";
 import axios from "axios";
 import "../assets/userInfoModal.css";
 import VolunteerInfoModal from "./VolunteerInfoModal";
-import { UserContext } from "../context/UserContext"; 
+import { UserContext } from "../context/UserContext";
+import { toast } from "react-toastify";
 
 const UserInfoModal = ({
   userId,
   isOpen,
+  setIsUserModalOpen,
   onRequestClose,
-  onSave,
+  isManual,
 }) => {
-  const { currentUser, login } = useContext(UserContext); 
+  const { currentUser, login } = useContext(UserContext);
   const token = localStorage.getItem("token");
+  // console.log("currentUser ", currentUser);
 
   const [userInfo, setUserInfo] = useState({
     first_name: "",
@@ -47,11 +50,19 @@ const UserInfoModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const confirmation = window.confirm("Are you sure you want to update your information?");
+    const confirmation = window.confirm(
+      "Are you sure you want to update your information?"
+    );
     if (!confirmation) return;
 
     try {
-      const updatedUserInfo = { ...userInfo, hasLoggedIn: true };
+      // const tempHasLoggedIn = currentUser.hasLoggedIn;
+      // let updatedUserInfo = { ...userInfo, hasLoggedIn: true };
+      // if (currentUser.role === "volunteer" && !tempHasLoggedIn) {
+      //   updatedUserInfo = { ...userInfo, hasLoggedIn: false };
+      // }
+
+      let updatedUserInfo = { ...userInfo, hasLoggedIn: true };
 
       const response = await axios.put(
         `http://localhost:3001/api/users/${userId}`,
@@ -63,16 +74,18 @@ const UserInfoModal = ({
         }
       );
 
+      toast.success("User updated successfully");
       console.log("User updated successfully: ", response.data);
 
       // Update the user in the context
-      login(response.data.user, token);
+      // console.log(response.data.user);
+      login(response.data.data, token);
+
+      onRequestClose();
 
       if (currentUser.role === "volunteer" && !currentUser.hasLoggedIn) {
         setShowVolunteerInfo(true);
       }
-
-      onRequestClose(); 
     } catch (error) {
       console.log("Error updating user info: ", error);
     }
@@ -161,14 +174,27 @@ const UserInfoModal = ({
           </div>
           <button type="submit">Update User Info</button>
         </form>
+        {isManual && (
+          <button
+            onClick={() => {
+              setIsUserModalOpen(false);
+            }}
+          >
+            close
+          </button>
+        )}
+        {/* {showVolunteerInfo && (
+          <VolunteerInfoModal
+            userId={currentUser.id}
+            isOpen={showVolunteerInfo}
+            setIsVolunteerModalOpen={setShowVolunteerInfo}
+            onRequestClose={() => {
+              setShowVolunteerInfo(false);
+            }}
+            isManual={false}
+          />
+        )} */}
       </div>
-      {showVolunteerInfo && (
-        <VolunteerInfoModal
-          userId={currentUser.id}
-          isOpen={true}
-          currentUser={currentUser}
-        />
-      )}
     </Modal>
   );
 };

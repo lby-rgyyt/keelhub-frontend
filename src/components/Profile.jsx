@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import UserInfoModal from "./UserInfoModal";
 import VolunteerInfoModal from "./VolunteerInfoModal";
 import "../assets/profile.css";
+import { UserContext } from "../context/UserContext";
 
 const Profile = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isVolunteerModalOpen, setIsVolunteerModalOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+  const { currentUser } = useContext(UserContext);
 
   const handleUserSave = () => {
     setMessage("User info saved successfully");
@@ -37,10 +39,11 @@ const Profile = () => {
     <div className="profile-container">
       <button onClick={handleOpenUserModal}>Edit Profile</button>
       <UserInfoModal
-        userId={1}
+        userId={currentUser.id}
         isOpen={isUserModalOpen}
+        setIsUserModalOpen={setIsUserModalOpen}
         onRequestClose={handleCloseUserModal}
-        onSave={handleUserSave}
+        isManual={true}
         currentUser={currentUser}
       />
       {currentUser.role === "volunteer" ? (
@@ -49,10 +52,11 @@ const Profile = () => {
             Edit Volunteer Info
           </button>
           <VolunteerInfoModal
-            userId={1}
+            userId={currentUser.id}
             isOpen={isVolunteerModalOpen}
+            setIsVolunteerModalOpen={setIsVolunteerModalOpen}
             onRequestClose={handleCloseVolunteerModal}
-            onSave={handleVolunteerSave}
+            isManual={true}
             currentUser={currentUser}
           />
         </div>

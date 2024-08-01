@@ -15,19 +15,23 @@ export const UserProvider = ({ children }) => {
     }
   });
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      axios.get("/api/auth/me", {
-        headers: { Authorization: `Bearer ${token}` }
-      }).then(response => {
-        setCurrentUser(response.data.user);
-        setIsLoggedIn(true);
-      }).catch(() => {
-        logout();
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     axios
+  //       .get("/api/auth/me", {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       })
+  //       .then((response) => {
+  //         console.log(response.data);
+  //         setCurrentUser(response.data.user);
+  //         setIsLoggedIn(true);
+  //       })
+  //       .catch(() => {
+  //         logout();
+  //       });
+  //   }
+  // }, []);
 
   const login = (user, token) => {
     localStorage.setItem("token", token);
@@ -44,7 +48,15 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ isLoggedIn, currentUser, login, logout }}>
+    <UserContext.Provider
+      value={{
+        isLoggedIn,
+        currentUser,
+        login,
+        logout,
+        setCurrentUser,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );
