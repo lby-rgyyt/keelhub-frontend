@@ -1,12 +1,35 @@
+import React, { useContext, useState, useEffect } from "react";
 import UserInfoModal from "../components/UserInfoModal";
-import "../assets/Dashboard.css";
+import VolunteerInfoModal from "../components/VolunteerInfoModal"; 
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Content from "../components/Content";
-import { useState } from "react";
+import { UserContext } from "../context/UserContext";
+import { Navigate } from "react-router-dom";
+import "../assets/Dashboard.css";
 
 const Dashboard = () => {
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const { currentUser } = useContext(UserContext);
+  const [showUserInfoModal, setShowUserInfoModal] = useState(false);
+  const [showVolunteerInfoModal, setShowVolunteerInfoModal] = useState(false);
+
+  // useEffect(() => {
+    // console.log("Dashboard useEffect triggered");
+    // console.log("currentUser: ", currentUser);
+
+  //   if (currentUser && !currentUser.hasLoggedIn) {
+  //     alert("Welcome to Keelworks! Here is some information you need to fill in order to proceed.");
+  //     setShowUserInfoModal(true);
+
+  //     if (currentUser.role === "volunteer") {
+  //       setShowVolunteerInfoModal(true);
+  //     }
+  //   }
+  // }, [currentUser]);
+
+  // if (!currentUser) {
+  //   return <Navigate to="/login" />;
+  // }
 
   return (
     <div className="dashboard-grid-container">
@@ -14,20 +37,24 @@ const Dashboard = () => {
       <Sidebar />
       <Content />
 
-      {/* {currentUser.hasLoggedIn ? (
-        <h2>Welcome</h2>
-      ) : (
+      {/* Display UserInfoModal if the user is logging in for the first time */}
+      {/* {showUserInfoModal && (
         <UserInfoModal
           userId={currentUser.id}
           isOpen={true}
           currentUser={currentUser}
+          onClose={() => setShowUserInfoModal(false)}
         />
       )} */}
-      {/* <UserInfoModal
-        userId={currentUser.id}
-        isOpen={true}
-        currentUser={currentUser}
-      /> */}
+
+      {/* {showVolunteerInfoModal && (
+        <VolunteerInfoModal
+          userId={currentUser.id}
+          isOpen={true}
+          currentUser={currentUser}
+          onClose={() => setShowVolunteerInfoModal(false)}
+        />
+      )} */}
     </div>
   );
 };

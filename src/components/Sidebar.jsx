@@ -9,7 +9,7 @@ function Sidebar() {
   return (
     <aside id="sidebar">
       <div className="sidebar-title">
-        <div className="sidebar-brand">KeelWorks</div>
+        <div className="sidebar-brand">KeelHub</div>
       </div>
       <ul className="sidebar-list">
         <li className="sidebar-list-item">

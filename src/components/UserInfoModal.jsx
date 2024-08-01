@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 import "../assets/userInfoModal.css";
 import VolunteerInfoModal from "./VolunteerInfoModal";
+import { UserContext } from "../context/UserContext"; 
 
 const UserInfoModal = ({
   userId,
   isOpen,
   onRequestClose,
   onSave,
-  currentUser,
 }) => {
-  const { first_name, last_name, personal_email, role, city, phone, timezone } =
-    currentUser;
+  const { currentUser, login } = useContext(UserContext); 
   const token = localStorage.getItem("token");
 
   const [userInfo, setUserInfo] = useState({
@@ -27,22 +26,18 @@ const UserInfoModal = ({
   const [showVolunteerInfo, setShowVolunteerInfo] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
-      // fetch(`/api/users/${userId}`)
-      //   .then((response) => response.json())
-      //   .then((data) => setUserInfo(data))
-      //   .catch((error) => console.error("Error fetching user info:", error));
+    if (isOpen && currentUser) {
       setUserInfo({
-        first_name,
-        last_name,
-        personal_email,
-        role,
-        city,
-        phone,
-        timezone,
+        first_name: currentUser.first_name,
+        last_name: currentUser.last_name,
+        personal_email: currentUser.personal_email,
+        role: currentUser.role,
+        city: currentUser.city,
+        phone: currentUser.phone,
+        timezone: currentUser.timezone,
       });
     }
-  }, [isOpen, userId]);
+  }, [isOpen, currentUser]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,30 +46,35 @@ const UserInfoModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const confirmation = window.confirm("Are you sure you want to update your information?");
+    if (!confirmation) return;
+
     try {
-      if (currentUser.role !== "volunteer") {
-        const newUserInfo = { ...userInfo, hasLoggedIn: true };
-        setUserInfo(newUserInfo);
-      }
+      const updatedUserInfo = { ...userInfo, hasLoggedIn: true };
+
       const response = await axios.put(
         `http://localhost:3001/api/users/${userId}`,
-        userInfo,
+        updatedUserInfo,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      //remove hasLoggedIn attribute
-      setUserInfo(userInfo);
+
       console.log("User updated successfully: ", response.data);
+
+      // Update the user in the context
+      login(response.data.user, token);
+
+      if (currentUser.role === "volunteer" && !currentUser.hasLoggedIn) {
+        setShowVolunteerInfo(true);
+      }
+
+      onRequestClose(); 
     } catch (error) {
-      console.log("Error Message: ", error);
-    }
-    console.log(currentUser);
-    if (currentUser.role === "volunteer" && !currentUser.hasLoggedIn) {
-      console.log("redirect");
-      setShowVolunteerInfo(true);
+      console.log("Error updating user info: ", error);
     }
   };
 
@@ -160,9 +160,6 @@ const UserInfoModal = ({
             />
           </div>
           <button type="submit">Update User Info</button>
-          <button type="button" onClick={onRequestClose}>
-            Close
-          </button>
         </form>
       </div>
       {showVolunteerInfo && (

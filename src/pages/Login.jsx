@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { UserContext } from "../context/UserContext"; 
 
 function Login() {
+  const { login } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,12 +30,9 @@ function Login() {
       );
 
       const { token, user } = response.data;
-      console.log(response.data);
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("currentUser", JSON.stringify(user));
 
       setError("");
+      login(user, token);
       navigate("/dashboard");
     } catch (error) {
       if (error.response && error.response.data) {

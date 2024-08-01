@@ -1,42 +1,33 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Home from "./components/Home";
 import Login from "./pages/Login";
-import useAuth from "./hooks/useAuth";
 import CreateAccount from "./components/CreateAccount";
 import Profile from "./components/Profile";
 import Dashboard from "./pages/Dashboard";
-
-import { useState } from "react";
+import { UserContext } from "./context/UserContext";
 
 function App() {
-  const isAuthenticated = useAuth();
+  const { isLoggedIn } = useContext(UserContext);
+
+  useEffect(() => {
+    console.log("isLoggedIn: ", isLoggedIn);
+  }, [isLoggedIn]);
 
   return (
     <div className="App">
       <Routes>
         <Route
           path="/login"
-          element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />}
+          element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login />}
         />
         <Route path="/" element={<Home />} />
         <Route
           path="/create-account"
-          element={
-            isAuthenticated ? <CreateAccount /> : <Navigate to="/login" />
-          }
+          element={isLoggedIn ? <CreateAccount /> : <Navigate to="/login" />}
         />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
-        {/* <Route
-          path="/Dashboard"
-          element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
-        /> */}
+        <Route path="/profile" element={isLoggedIn ? <Profile /> : <Navigate to="/login" />} />
+        <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
       </Routes>
     </div>
   );

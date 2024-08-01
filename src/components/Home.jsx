@@ -18,7 +18,7 @@ const Home = () => {
       </p>
       {localStorage.getItem("token") ? (
         <div>
-          <button
+          <button class="button-10"
             onClick={() => {
               handleLogout();
             }}
@@ -27,19 +27,19 @@ const Home = () => {
             Logout
           </button>
           <Link to="/create-account">
-            <button style={{ padding: "10px 20px", fontSize: "16px" }}>
+            <button class="button-10"style={{ padding: "10px 20px", fontSize: "16px" }}>
               Create Account
             </button>
           </Link>
           <Link to="/dashboard">
-            <button style={{ padding: "10px 20px", fontSize: "16px" }}>
+            <button class="button-10"style={{ padding: "10px 20px", fontSize: "16px" }}>
               Dashboard
             </button>
           </Link>
         </div>
       ) : (
         <Link to="/login">
-          <button style={{ padding: "10px 20px", fontSize: "16px" }}>
+          <button class="button-10" style={{ padding: "10px 20px", fontSize: "16px" }}>
             Login
           </button>
         </Link>
