@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
+import "../assets/login.css"; // Import the CSS file
 
 function Login() {
   const { currentUser, updateCurrentUserStatus, login } =
@@ -51,12 +52,13 @@ function Login() {
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">username:</label>
+          <label htmlFor="username">Username:</label>
           <input
             type="email"
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            required
           />
         </div>
         <div>
@@ -66,6 +68,7 @@ function Login() {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
         <button type="submit">Login</button>

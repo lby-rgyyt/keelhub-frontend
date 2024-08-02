@@ -16,10 +16,6 @@ import { ToastContainer, toast } from "react-toastify";
 function App() {
   const { isLoggedIn } = useContext(UserContext);
 
-  useEffect(() => {
-    console.log("isLoggedIn: ", isLoggedIn);
-  }, [isLoggedIn]);
-
   return (
     <div className="App">
       {/* <ToastContainer position="top-center" /> */}

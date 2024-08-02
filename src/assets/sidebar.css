@@ -1,0 +1,11 @@
+#sidebar .sidebar-title .sidebar-brand {
+    display: flex;
+    align-items: center;
+  }
+  
+  #sidebar .sidebar-title .sidebar-brand .logo {
+    width: 30px; 
+    height: auto;
+    margin-right: 10px; 
+  }
+  

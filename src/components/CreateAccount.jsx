@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-import "../styles/CreateAccount.css";
+import "../assets/CreateAccount.css";
 
 const CreateAccount = () => {
   const blank_user = {
@@ -23,12 +22,18 @@ const CreateAccount = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
       [id]: value,
     }));
+  };
+
+  const handleClose = () => {
+    navigate("/dashboard");
   };
 
   const handleSubmit = async (e) => {
@@ -53,7 +58,7 @@ const CreateAccount = () => {
           volunteer_id: response.data.data.id,
           skills: [],
         };
-        const newResponse = await axios.post(
+        await axios.post(
           "http://localhost:3001/api/volunteers",
           newVolunteer,
           {
@@ -65,7 +70,6 @@ const CreateAccount = () => {
       }
 
       setSuccess("User created successfully!");
-
       setFormData(blank_user);
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred");
@@ -76,17 +80,7 @@ const CreateAccount = () => {
     <div className="create-account">
       <h1>Create Account</h1>
       <form onSubmit={handleSubmit}>
-        {[
-          "username",
-          "password",
-          //   "personal_email",
-          //   "firstName",
-          //   "lastName",
-          //   "city",
-          //   "phone",
-          //   "profilePic",
-          //   "timezone",
-        ].map((field) => (
+        {["username", "password"].map((field) => (
           <div key={field}>
             <label htmlFor={field}>
               {field.replace(/([A-Z])/g, " $1").toUpperCase()}:
@@ -121,7 +115,10 @@ const CreateAccount = () => {
             <option value="3">3</option>
           </select>
         </div>
-        <button type="submit">Create Account</button>
+        <button type="submit" className="submit-button">Create Account</button>
+        <button onClick={handleClose} className="close-button">
+        Close
+      </button>
       </form>
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
