@@ -7,11 +7,16 @@ import { toast } from "react-toastify";
 function Header() {
   const navigate = useNavigate();
   const { isLoggedIn, currentUser, logout } = useContext(UserContext);
+
   const handleLogout = () => {
     logout();
     alert("You have signed out");
     // toast.success("You have signed out");
     navigate("/");
+  };
+
+  const handleProfile = () => {
+    navigate("/profile");
   };
 
   return (
@@ -25,9 +30,14 @@ function Header() {
         <BsFillBellFill className="icon" />
         <BsPersonCircle className="icon" />
         {isLoggedIn && (
-          <button className="logout-button" onClick={handleLogout}>
-            Logout
-          </button>
+          <>
+            <button onClick={handleProfile}>
+              Profile
+            </button>
+            <button onClick={handleLogout}>
+              Logout
+            </button>
+          </>
         )}
       </div>
     </header>
