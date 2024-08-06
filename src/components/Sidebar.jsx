@@ -4,7 +4,7 @@ import {
   BsFillPersonPlusFill,
   BsFillPeopleFill,
 } from "react-icons/bs";
-import logo from "../assets/logo.png"
+import logo from "../assets/logo.png";
 import "../assets/sidebar.css";
 
 function Sidebar() {
@@ -12,8 +12,8 @@ function Sidebar() {
     <aside id="sidebar">
       <div className="sidebar-title">
         <div className="sidebar-brand">
-        <img src={logo} alt="KeelHub Logo" className="logo" />
-        KeelHub
+          <img src={logo} alt="KeelHub Logo" className="logo" />
+          KeelHub
         </div>
       </div>
       <ul className="sidebar-list">
@@ -28,7 +28,7 @@ function Sidebar() {
           </a>
         </li>
         <li className="sidebar-list-item">
-          <a href="">
+          <a href="/volunteers">
             <BsFillPeopleFill className="icon" /> Volunteers
           </a>
         </li>

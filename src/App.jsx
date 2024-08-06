@@ -12,6 +12,8 @@ import Profile from "./components/Profile";
 import Dashboard from "./pages/Dashboard";
 import { UserContext } from "./context/UserContext";
 import { ToastContainer, toast } from "react-toastify";
+import Volunteers from "./pages/Volunteers";
+import VolunteerDetail from "./components/VolunteerDetail";
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);
@@ -36,6 +38,14 @@ function App() {
         <Route
           path="/dashboard"
           element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/volunteers"
+          element={isLoggedIn ? <Volunteers /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/volunteer-detail/"
+          element={isLoggedIn ? <VolunteerDetail /> : <Navigate to="/login" />}
         />
       </Routes>
     </div>

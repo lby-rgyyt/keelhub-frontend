@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import "../assets/CreateAccount.css";
+import Modal from "react-modal";
+import "../styles/CreateAccount.css";
 
-const CreateAccount = () => {
+Modal.setAppElement("#root");
+
+const CreateAccount = ({ isOpen, onClose }) => {
   const blank_user = {
     username: "",
     password: "",
@@ -22,18 +24,12 @@ const CreateAccount = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const navigate = useNavigate();
-
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
       [id]: value,
     }));
-  };
-
-  const handleClose = () => {
-    navigate("/dashboard");
   };
 
   const handleSubmit = async (e) => {
@@ -52,13 +48,13 @@ const CreateAccount = () => {
           },
         }
       );
-
+      console.log("new user: ", response.data);
       if (formData.role === "volunteer") {
         const newVolunteer = {
           volunteer_id: response.data.data.id,
           skills: [],
         };
-        await axios.post(
+        const response2 = await axios.post(
           "http://localhost:3001/api/volunteers",
           newVolunteer,
           {
@@ -67,62 +63,70 @@ const CreateAccount = () => {
             },
           }
         );
+        console.log("new volunteer: ", response2.data);
       }
 
       setSuccess("User created successfully!");
       setFormData(blank_user);
+      setTimeout(() => {
+        onClose();
+      }, 2000);
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred");
     }
   };
 
   return (
-    <div className="create-account">
-      <h1>Create Account</h1>
-      <form onSubmit={handleSubmit}>
-        {["username", "password"].map((field) => (
-          <div key={field}>
-            <label htmlFor={field}>
-              {field.replace(/([A-Z])/g, " $1").toUpperCase()}:
-            </label>
-            <input
-              type={field === "password" ? "password" : "text"}
-              id={field}
-              value={formData[field]}
-              onChange={handleChange}
-              required
-            />
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      contentLabel="Add New Volunteer"
+      className="modal-content"
+      overlayClassName="modal-overlay"
+    >
+      <div className="create-account">
+        <h1>Add New Volunteer</h1>
+        <form onSubmit={handleSubmit}>
+          {["firstName", "lastName", "username", "password"].map((field) => (
+            <div key={field}>
+              <label htmlFor={field}>
+                {field
+                  .replace(/([A-Z])/g, " $1")
+                  .charAt(0)
+                  .toUpperCase() + field.replace(/([A-Z])/g, " $1").slice(1)}
+                :
+              </label>
+              <input
+                type={field === "password" ? "password" : "text"}
+                id={field}
+                value={formData[field]}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          ))}
+          <div>
+            <label htmlFor="role">Role:</label>
+            <select id="role" value={formData.role} onChange={handleChange}>
+              <option value="volunteer">Volunteer</option>
+              <option value="project_manager">Project Manager</option>
+              <option value="hr">HR</option>
+              <option value="admin">Admin</option>
+            </select>
           </div>
-        ))}
-        <div>
-          <label htmlFor="role">Role:</label>
-          <select id="role" value={formData.role} onChange={handleChange}>
-            <option value="admin">Admin</option>
-            <option value="hr">HR</option>
-            <option value="project_manager">Project Manager</option>
-            <option value="volunteer">Volunteer</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="access_level">Access Level:</label>
-          <select
-            id="access_level"
-            value={formData.access_level}
-            onChange={handleChange}
-          >
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </select>
-        </div>
-        <button type="submit" className="submit-button">Create Account</button>
-        <button onClick={handleClose} className="close-button">
-        Close
-      </button>
-      </form>
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
-    </div>
+          <div className="button-group">
+            <button type="button" onClick={onClose} className="cancel-button">
+              Cancel
+            </button>
+            <button type="submit" className="submit-button">
+              Save
+            </button>
+          </div>
+        </form>
+        {error && <p className="error">{error}</p>}
+        {success && <p className="success">{success}</p>}
+      </div>
+    </Modal>
   );
 };
 

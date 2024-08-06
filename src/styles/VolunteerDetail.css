@@ -1,0 +1,136 @@
+.volunteer-detail {
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  padding: 20px;
+}
+
+.breadcrumb {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.user-info {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.user-details {
+  flex-grow: 1;
+}
+
+.name-and-edit {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.name-and-edit h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.edit-button {
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.edit-button svg {
+  margin-right: 6px;
+}
+
+.status {
+  font-size: 14px;
+  background-color: #e6f3ff;
+  color: #0066cc;
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.user-details p {
+  margin: 0 0 10px 0;
+}
+
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.skill-tag {
+  background-color: #e6f3ff;
+  color: #0066cc;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.info-table th,
+.info-table td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.info-table th {
+  font-weight: normal;
+  color: #666;
+}
+
+.name-and-edit {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.edit-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-button {
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.edit-button svg {
+  margin-right: 6px;
+}
+
+.edit-button.volunteer-edit {
+  background-color: #e6f3ff;
+  color: #0066cc;
+}
