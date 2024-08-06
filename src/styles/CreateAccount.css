@@ -78,3 +78,73 @@ select {
   background-color: #4a6ee0;
   color: white;
 }
+
+.password-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.password-input-container input {
+  flex-grow: 1;
+}
+
+.toggle-password,
+.generate-password {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.toggle-password:hover,
+.generate-password:hover {
+  background-color: #e0e0e0;
+}
+
+.password-input-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.password-input-container input {
+  flex-grow: 1;
+  margin-bottom: 5px;
+}
+
+.password-action-button {
+  margin: 0 5px 5px 0;
+  padding: 5px 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.password-action-button:hover {
+  background-color: #e0e0e0;
+}
+
+.username-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.username-input-container input {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.generate-username {
+  padding: 5px 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.generate-username:hover {
+  background-color: #e0e0e0;
+}

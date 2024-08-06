@@ -13,7 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import { UserContext } from "./context/UserContext";
 import { ToastContainer, toast } from "react-toastify";
 import Volunteers from "./pages/Volunteers";
-import VolunteerDetail from "./components/VolunteerDetail";
+import VolunteerDetail from "./components/volunteers/VolunteerDetail";
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);

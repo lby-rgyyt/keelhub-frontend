@@ -3,10 +3,12 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Content from "../components/Content";
 import CreateAccount from "../components/CreateAccount";
-import VolunteersTable from "../components/VolunteersTable";
+import VolunteersTable from "../components/volunteers/VolunteersTable";
+import ReactPaginate from "react-paginate";
 import { UserContext } from "../context/UserContext";
 import "../assets/Dashboard.css";
 import "../styles/VolunteerDetail.css";
+import "../styles/VolunteersTable.css";
 import axios from "axios";
 
 const Volunteers = () => {
@@ -89,7 +91,7 @@ const Volunteers = () => {
 
       if (filter.role) {
         result = result.filter(
-          (v) => v.Volunteer.jobTitles[0].title === filter.role
+          (v) => v.Volunteer.jobTitles[0]?.title === filter.role
         );
       }
 
@@ -211,9 +213,23 @@ const Volunteers = () => {
     setFilteredVolunteers(newOrder);
   };
 
+  const [currentPage, setCurrentPage] = useState(0);
+  const volunteersPerPage = 3;
+
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const offset = currentPage * volunteersPerPage;
+  const currentVolunteers = filteredVolunteers.slice(
+    offset,
+    offset + volunteersPerPage
+  );
+  const pageCount = Math.ceil(filteredVolunteers.length / volunteersPerPage);
+
   return (
-    <div className="dashboard-grid-container">
-      {/* <div> */}
+    // <div className="dashboard-grid-container">
+    <div>
       <Header />
       <Sidebar />
       <div className="volunteer-actions">
@@ -285,14 +301,24 @@ const Volunteers = () => {
       </div>
 
       <VolunteersTable
-        // volunteers={volunteers}
-        volunteers={filteredVolunteers}
+        volunteers={currentVolunteers}
+        // volunteers={filteredVolunteers}
         sortByName={sortByName}
         sortByHrs={sortByHrs}
         sortByRole={sortByRole}
         sortByStartDate={sortByStartDate}
       />
+
+      <ReactPaginate
+        previousLabel={"Previous"}
+        nextLabel={"Next"}
+        pageCount={pageCount}
+        onPageChange={handlePageChange}
+        containerClassName={"pagination"}
+        activeClassName={"active"}
+      />
       <div>showing {filteredVolunteers.length} results</div>
+
       <CreateAccount isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
