@@ -1,11 +1,49 @@
-#sidebar .sidebar-title .sidebar-brand {
-    display: flex;
-    align-items: center;
-  }
-  
-  #sidebar .sidebar-title .sidebar-brand .logo {
-    width: 30px; 
-    height: auto;
-    margin-right: 10px; 
-  }
-  
+#sidebar {
+  width: 200px; 
+  height: 100vh; 
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px; 
+  z-index: 1000; 
+}
+
+#sidebar .sidebar-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#sidebar .sidebar-brand {
+  display: flex;
+  align-items: center;
+}
+
+#sidebar .sidebar-brand .logo {
+  width: 30px; 
+  height: auto;
+  margin-right: 10px; 
+}
+
+#sidebar .sidebar-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1; 
+}
+
+#sidebar .sidebar-list-item {
+  margin-bottom: 10px;
+}
+
+#sidebar .sidebar-list-item a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+#sidebar .sidebar-list-item .icon {
+  margin-right: 10px;
+}

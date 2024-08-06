@@ -16,3 +16,7 @@ button:hover {
 button:focus {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

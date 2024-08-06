@@ -1,36 +1,64 @@
-import React from "react";
+import React, {useState} from "react";
+import { Link } from "react-router-dom";
 import {
   BsFillHouseDoorFill,
   BsFillPersonPlusFill,
   BsFillPeopleFill,
 } from "react-icons/bs";
-import logo from "../assets/logo.png"
+import { HiOutlineTemplate } from "react-icons/hi";
+import { FiEdit2 } from "react-icons/fi";
+import logo from "../assets/logo.png";
 import "../assets/sidebar.css";
 
 function Sidebar() {
+  const [onboardingOpen, setOnboardingOpen] = useState(false);
+
+  const toggleOnboarding = () => {
+    setOnboardingOpen(!onboardingOpen);
+  };
+
   return (
     <aside id="sidebar">
       <div className="sidebar-title">
         <div className="sidebar-brand">
-        <img src={logo} alt="KeelHub Logo" className="logo" />
-        KeelHub
+          <img src={logo} alt="KeelHub Logo" className="logo" />
+          <span>KeelHub</span>
         </div>
       </div>
       <ul className="sidebar-list">
         <li className="sidebar-list-item">
-          <a href="">
+          <Link to="/dashboard">
             <BsFillHouseDoorFill className="icon" /> Home
-          </a>
+          </Link>
         </li>
         <li className="sidebar-list-item">
-          <a href="">
+          <button className="sidebar-button" onClick={toggleOnboarding}>
             <BsFillPersonPlusFill className="icon" /> Onboarding
-          </a>
+          </button>
+          {onboardingOpen && (
+            <ul className="sidebar-sublist">
+              <li className="sidebar-list-item">
+                <Link to="/onboarding">
+                  <HiOutlineTemplate className="icon" /> Tasks
+                </Link>
+              </li>
+              <li className="sidebar-list-item">
+                <Link to="/onboarding-task-setting">
+                  <FiEdit2 className="icon" /> Workflow
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
         <li className="sidebar-list-item">
-          <a href="">
+          <Link to="/project">
+            <BsFillPeopleFill className="icon" /> Project
+          </Link>
+        </li>
+        <li className="sidebar-list-item">
+          <Link to="/volunteers">
             <BsFillPeopleFill className="icon" /> Volunteers
-          </a>
+          </Link>
         </li>
       </ul>
     </aside>
