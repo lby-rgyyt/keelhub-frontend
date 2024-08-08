@@ -12,9 +12,28 @@ const UserInfoModal = ({
   onRequestClose,
   isManual,
 }) => {
-  const { currentUser, login } = useContext(UserContext);
+  const { login } = useContext(UserContext);
   const token = localStorage.getItem("token");
-  // console.log("currentUser ", currentUser);
+  const [currentUser, setCurrentUser] = useState(null);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/api/users/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("current user: ", response.data);
+        setCurrentUser(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const [userInfo, setUserInfo] = useState({
     first_name: "",

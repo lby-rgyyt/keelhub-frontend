@@ -14,7 +14,9 @@ import Dashboard from "./pages/Dashboard";
 import OnboardingTaskDisplay from "./pages/OnboardingTaskDisplay";
 import VolunteerListPage from "./pages/VolunteerListPage"; 
 import { UserContext } from "./context/UserContext";
-//import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import Volunteers from "./pages/Volunteers";
+import VolunteerDetail from "./components/volunteers/VolunteerDetail";
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);
@@ -49,6 +51,14 @@ function App() {
             path="/onboarding/tasks"
             element={isLoggedIn ? <Layout><VolunteerListPage /></Layout> : <Navigate to="/login" />}
           />
+          <Route
+          path="/volunteers"
+          element={isLoggedIn ? <Volunteers /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/volunteer-detail/"
+          element={isLoggedIn ? <VolunteerDetail /> : <Navigate to="/login" />}
+        />
         </Routes>
     </div>
   );
