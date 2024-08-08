@@ -31,7 +31,7 @@ function Header() {
   //         ) : (
   //           <>
   //             <a href={routeTo} className="text-blue-600 hover:text-blue-800">
-  //               {/* {name.charAt(0).toUpperCase() + name.slice(1)} */}
+  //               {name.charAt(0).toUpperCase() + name.slice(1)}
   //             </a>
   //             <span className="mx-2">/</span>
   //           </>
@@ -42,16 +42,16 @@ function Header() {
   // };
 
   return (
-    <header className="bg-white shadow-sm fixed w-full z-10" style={{ left: '180px' }}> {/* Adjusted left position */}
+    <header className="bg-white shadow-sm fixed w-full z-10" style={{ left: '280px' }}> {/* Adjusted left position */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <nav className="flex" aria-label="Breadcrumb">
-            <ol className="flex items-center space-x-4">
+            {/* <ol className="flex items-center space-x-4"> */}
               {/* <li>
                 <a href="/" className="text-blue-600 hover:text-blue-800">Home</a>
-              </li> */}
-              {/* {getBreadcrumbs()} */}
-            </ol>
+              </li>
+              {getBreadcrumbs()}
+            </ol> */}
           </nav>
           <div className="flex items-center space-x-4">
             <button className="text-gray-500 hover:text-gray-700">
