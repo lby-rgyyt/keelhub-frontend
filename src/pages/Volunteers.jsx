@@ -1,12 +1,10 @@
 import { useContext, useState, useEffect } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import Content from "../components/Content";
 import CreateAccount from "../components/CreateAccount";
 import VolunteersTable from "../components/volunteers/VolunteersTable";
 import ReactPaginate from "react-paginate";
 import { UserContext } from "../context/UserContext";
-import "../assets/Dashboard.css";
 import "../styles/VolunteerDetail.css";
 import "../styles/VolunteersTable.css";
 import axios from "axios";
@@ -230,8 +228,6 @@ const Volunteers = () => {
   return (
     // <div className="dashboard-grid-container">
     <div>
-      <Header />
-      <Sidebar />
       <div className="volunteer-actions">
         <div className="filter-container">
           <span className="filter-label">Filter by:</span>

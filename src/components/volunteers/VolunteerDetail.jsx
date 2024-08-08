@@ -1,14 +1,11 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
 import { useLocation } from "react-router-dom";
 import { FaPencilAlt, FaUserEdit } from "react-icons/fa";
 import VolunteerNotes from "./VolunteerNotes";
 import UserInfoModal from "../UserInfoModal";
 import VolunteerInfoModal from "../VolunteerInfoModal";
 import "../../styles/VolunteerDetail.css";
-import "../../assets/Dashboard.css";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -56,8 +53,6 @@ const VolunteerDetail = () => {
     // <div className="dashboard-grid-container">
     <div>
       <div className="volunteer-detail">
-        <Header />
-        <Sidebar />
         <div className="content">
           <div className="breadcrumb">
             Volunteers / {currentVolunteer?.first_name}{" "}
@@ -90,7 +85,7 @@ const VolunteerDetail = () => {
                 </div>
               </div>
 
-              <p>{currentVolunteer?.Volunteer.jobTitles[0].title}</p>
+              <p>{currentVolunteer?.Volunteer.jobTitles[0]?.title}</p>
               <div className="skills">
                 {currentVolunteer?.Volunteer.skills &&
                   currentVolunteer.Volunteer.skills.map((skill, index) => (

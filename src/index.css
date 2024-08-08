@@ -1,9 +1,8 @@
-@import 'tailwindcss/tailwind.css';
+@import "tailwindcss/tailwind.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 @layer base {
   body {
@@ -15,11 +14,11 @@
   .sidebar-link {
     @apply flex items-center p-2 text-keelworks-text hover:bg-gray-100 rounded-md;
   }
-  
+
   .sidebar-icon {
     @apply mr-3 text-xl;
   }
-  
+
   .sidebar-active {
     @apply bg-keelworks-blue;
   }
