@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import keelworksLogo from "../assets/keelworks_cover.jpg";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -17,16 +19,15 @@ const Home = () => {
       <header className="bg-white shadow-md">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center">
-            <img
-              className="h-10 w-auto"
-              src={keelworksLogo}
-              alt="KeelWorks"
-            />
+            <img className="h-10 w-auto" src={keelworksLogo} alt="KeelWorks" />
           </div>
           <div className="flex items-center space-x-4">
             {isLoggedIn ? (
               <>
-                <Link to="/dashboard" className="text-blue-600 hover:text-blue-800 font-medium">
+                <Link
+                  to="/dashboard"
+                  className="text-blue-600 hover:text-blue-800 font-medium"
+                >
                   Dashboard
                 </Link>
                 <button
@@ -67,6 +68,19 @@ const Home = () => {
                   Get started
                 </Link>
               )}
+            </div>
+            <div>
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  const credentialResponseDecoded = jwtDecode(
+                    credentialResponse.credential
+                  );
+                  console.log(credentialResponseDecoded);
+                }}
+                onError={() => {
+                  console.log("Login Failed");
+                }}
+              />
             </div>
           </div>
         </div>

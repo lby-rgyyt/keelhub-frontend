@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
 
 export const UserContext = createContext();
 
@@ -32,6 +33,25 @@ export const UserProvider = ({ children }) => {
   //       });
   //   }
   // }, []);
+
+  // // use access_token to get data
+  // const login = useGoogleLogin({
+  //   onSuccess: async (response) => {
+  //     try {
+  //       const res = await axios.get(
+  //         "https://www.googleapis.com/oauth2/v3/userinfo",
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${response.access_token}`,
+  //           },
+  //         }
+  //       );
+  //       console.log(res);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   },
+  // });
 
   const login = (user, token) => {
     localStorage.setItem("token", token);
