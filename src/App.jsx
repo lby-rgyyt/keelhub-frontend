@@ -8,42 +8,50 @@ import {
 import Home from "./components/Home";
 import Login from "./pages/Login";
 import CreateAccount from "./components/CreateAccount";
+import Layout from './components/Layout';
 import Profile from "./components/Profile";
 import Dashboard from "./pages/Dashboard";
 import OnboardingTaskDisplay from "./pages/OnboardingTaskDisplay";
+import VolunteerListPage from "./pages/VolunteerListPage"; 
 import { UserContext } from "./context/UserContext";
-import { ToastContainer, toast } from "react-toastify";
+//import { ToastContainer } from "react-toastify";
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);
 
   return (
     <div className="App">
-      <Routes>
-        <Route
-          path="/login"
-          element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login />}
-        />
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/create-account"
-          element={isLoggedIn ? <CreateAccount /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/profile"
-          element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/dashboard"
-          element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/onboarding-task-setting"
-          element={isLoggedIn ? <OnboardingTaskDisplay /> : <Navigate to="/login" />}
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Home />} />
+
+          {/* Public route that renders the Layout without sign-in */}
+          <Route path="/public/home" element={<Layout><Home /></Layout>} />
+
+          {/* Other routes that require sign-in */}
+          <Route
+            path="/create-account"
+            element={isLoggedIn ? <Layout><CreateAccount /></Layout> : <Navigate to="/login" />}
           />
-      </Routes>
+          <Route
+            path="/profile"
+            element={isLoggedIn ? <Layout><Profile /></Layout> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/dashboard"
+            element={isLoggedIn ? <Layout><Dashboard /></Layout> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/onboarding/workflow"
+            element={isLoggedIn ? <Layout><OnboardingTaskDisplay /></Layout> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/onboarding/tasks"
+            element={isLoggedIn ? <Layout><VolunteerListPage /></Layout> : <Navigate to="/login" />}
+          />
+        </Routes>
     </div>
   );
-}
+};
 
 export default App;

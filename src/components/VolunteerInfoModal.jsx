@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
-import "../assets/volunteerInfoModal.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";

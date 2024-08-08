@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import UserInfoModal from "./UserInfoModal";
 import VolunteerInfoModal from "./VolunteerInfoModal";
-import "../assets/profile.css";
 import { UserContext } from "../context/UserContext";
 
 const Profile = () => {

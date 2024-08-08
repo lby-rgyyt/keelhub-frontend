@@ -15,9 +15,9 @@ const OnboardingTasks = () => {
   const [isEditMode, setIsEditMode] = useState(false);
 
 
-
   useEffect(() => {
     fetchTasks();
+    console.log('1234');
   }, []);
 
   const fetchTasks = async () => {

@@ -1,22 +1,26 @@
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  background-color: #007bff; 
-  color: #ffffff; 
-  border: 1px solid transparent;
-  border-radius: 8px;
-  transition: background-color 0.25s, border-color 0.25s;
-}
-
-button:hover {
-  background-color: #0056b3; 
-}
-
-button:focus {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+@import 'tailwindcss/tailwind.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer base {
+  body {
+    @apply bg-white text-keelworks-text font-sans;
+  }
+}
+
+@layer components {
+  .sidebar-link {
+    @apply flex items-center p-2 text-keelworks-text hover:bg-gray-100 rounded-md;
+  }
+  
+  .sidebar-icon {
+    @apply mr-3 text-xl;
+  }
+  
+  .sidebar-active {
+    @apply bg-keelworks-blue;
+  }
+}

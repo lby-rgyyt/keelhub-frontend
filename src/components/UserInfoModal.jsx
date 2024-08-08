@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
 import axios from "axios";
-import "../assets/userInfoModal.css";
 import VolunteerInfoModal from "./VolunteerInfoModal";
 import { UserContext } from "../context/UserContext";
 import { toast } from "react-toastify";
