@@ -1,7 +1,13 @@
 import React from "react";
 import VolunteerContainer from "./VolunteerContainer";
 
-const VolunteersTable = ({ volunteers, sortByName, sortByHrs, sortByRole }) => {
+const VolunteersTable = ({
+  volunteers,
+  sortByName,
+  sortByHrs,
+  sortByRole,
+  sortByStartDate,
+}) => {
   return (
     <table>
       <thead>
@@ -16,7 +22,7 @@ const VolunteersTable = ({ volunteers, sortByName, sortByHrs, sortByRole }) => {
             <button onClick={sortByHrs}>Start Date</button>
           </th>
           <th>
-            <button onClick={sortByHrs}>Hours/wk</button>
+            <button onClick={sortByStartDate}>Hours/wk</button>
           </th>
           <th>Status</th>
           <th>Projects Assigned</th>

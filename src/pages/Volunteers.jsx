@@ -73,16 +73,16 @@ const Volunteers = () => {
     fetchVolunteers();
     fetchJobTitles();
   }, []);
-  console.log("volunteers: ", volunteers);
-  console.log("job titles: ", jobTitles);
-  console.log("filter: ", filter);
+  //   console.log("volunteers: ", volunteers);
+  //   console.log("job titles: ", jobTitles);
+  //   console.log("filter: ", filter);
 
   useEffect(() => {
     const filterVolunteers = () => {
       let result = [...volunteers];
       console.log("use effect filter.active: ", filter.Active);
-      if (filter.Active !== "") {
-        result = result.filter((v) => v.is_active === filter.Active);
+      if (filter.Active === "true" || filter.Active === "false") {
+        result = result.filter((v) => v.is_active.toString() === filter.Active);
       }
 
       if (filter.status) {
@@ -98,7 +98,7 @@ const Volunteers = () => {
       //   if (filter.projects) {
       //     result = result.filter((v) => v.projects.includes(filter.projects));
       //   }
-      console.log("filter result: ", result);
+      //   console.log("filter result: ", result);
       setFilteredVolunteers(result);
     };
     filterVolunteers();
