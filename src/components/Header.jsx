@@ -19,38 +19,38 @@ function Header() {
     navigate("/profile");
   };
 
-  const getBreadcrumbs = () => {
-    const pathnames = location.pathname.split('/').filter((x) => x);
-    return pathnames.map((name, index) => {
-      const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
-      const isLast = index === pathnames.length - 1;
-      return (
-        <li key={name}>
-          {isLast ? (
-            <span className="text-gray-500">{name.charAt(0).toUpperCase() + name.slice(1)}</span>
-          ) : (
-            <>
-              <a href={routeTo} className="text-blue-600 hover:text-blue-800">
-                {/* {name.charAt(0).toUpperCase() + name.slice(1)} */}
-              </a>
-              <span className="mx-2">/</span>
-            </>
-          )}
-        </li>
-      );
-    });
-  };
+  // const getBreadcrumbs = () => {
+  //   const pathnames = location.pathname.split('/').filter((x) => x);
+  //   return pathnames.map((name, index) => {
+  //     const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
+  //     const isLast = index === pathnames.length - 1;
+  //     return (
+  //       <li key={name}>
+  //         {isLast ? (
+  //           <span className="text-gray-500">{name.charAt(0).toUpperCase() + name.slice(1)}</span>
+  //         ) : (
+  //           <>
+  //             <a href={routeTo} className="text-blue-600 hover:text-blue-800">
+  //               {/* {name.charAt(0).toUpperCase() + name.slice(1)} */}
+  //             </a>
+  //             <span className="mx-2">/</span>
+  //           </>
+  //         )}
+  //       </li>
+  //     );
+  //   });
+  // };
 
   return (
-    <header className="bg-white shadow-sm fixed w-full z-10" style={{ left: '140px' }}> {/* Adjusted left position */}
+    <header className="bg-white shadow-sm fixed w-full z-10" style={{ left: '180px' }}> {/* Adjusted left position */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <nav className="flex" aria-label="Breadcrumb">
             <ol className="flex items-center space-x-4">
-              <li>
+              {/* <li>
                 <a href="/" className="text-blue-600 hover:text-blue-800">Home</a>
-              </li>
-              {getBreadcrumbs()}
+              </li> */}
+              {/* {getBreadcrumbs()} */}
             </ol>
           </nav>
           <div className="flex items-center space-x-4">

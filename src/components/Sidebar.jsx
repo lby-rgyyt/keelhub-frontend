@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { HiHome, HiUserAdd, HiClipboardList, HiTemplate, HiViewGrid, HiUserGroup } from 'react-icons/hi';
+import keelWorksLogoBlack from '../assets/logo.png'
 
 function Sidebar() {
   const [onboardingOpen, setOnboardingOpen] = useState(true);
@@ -10,7 +11,10 @@ function Sidebar() {
 
   return (
     <aside className="bg-white w-64 min-h-screen p-4 border-r border-gray-200">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-8">KeelWorks</h1>
+      <h1 className="flex items-center text-2xl font-semibold text-gray-800 mb-8">
+      <img src={keelWorksLogoBlack} alt="KeelWorks Logo" className="h-8 w-auto mr-2" />
+        KeelWorks
+      </h1>
       <nav>
         <ul className="space-y-2">
           <li>
