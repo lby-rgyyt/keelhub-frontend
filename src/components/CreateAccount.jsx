@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../styles/CreateAccount.css";
+// import "../styles/CreateAccount.css";
 
 Modal.setAppElement("#root");
 
@@ -15,8 +15,8 @@ const CreateAccount = ({ isOpen, onClose }) => {
     email: "",
     role: "volunteer",
     access_level: "1",
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     city: "",
     phone: "",
     profilePic: "",
@@ -56,16 +56,16 @@ const CreateAccount = ({ isOpen, onClose }) => {
   };
 
   const generateUsername = async () => {
-    const { firstName, lastName } = formData;
-    if (!firstName || !lastName) {
+    const { first_name, last_name } = formData;
+    if (!first_name || !last_name) {
       setError("Please enter both first name and last name");
       return;
     }
 
-    const sanitizedFirstName = firstName.toLowerCase().replace(/\s+/g, "");
-    const sanitizedLastName = lastName.toLowerCase().replace(/\s+/g, "");
-    const baseUsername = `${sanitizedFirstName}.${sanitizedLastName}@keelworks.org`;
-    //const baseUsername = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@keelworks.org`;
+    const sanitizedfirst_name = first_name.toLowerCase().replace(/\s+/g, "");
+    const sanitizedlast_name = last_name.toLowerCase().replace(/\s+/g, "");
+    const baseUsername = `${sanitizedfirst_name}.${sanitizedlast_name}@keelworks.org`;
+    //const baseUsername = `${first_name.toLowerCase()}.${last_name.toLowerCase()}@keelworks.org`;
     let username = baseUsername;
     let counter = 1;
     let isUnique = false;
@@ -85,7 +85,7 @@ const CreateAccount = ({ isOpen, onClose }) => {
         if (response.data.isAvailable) {
           isUnique = true;
         } else {
-          username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${counter}@keelworks.org`;
+          username = `${first_name.toLowerCase()}.${last_name.toLowerCase()}${counter}@keelworks.org`;
           counter++;
         }
       } catch (error) {
@@ -109,7 +109,7 @@ const CreateAccount = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    console.log("formdata: ", formData);
 
     try {
       const token = localStorage.getItem("token");
@@ -157,123 +157,146 @@ const CreateAccount = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="Add New Volunteer"
-      className="modal-content"
-      overlayClassName="modal-overlay"
+      className="fixed inset-0 flex items-center justify-center"
+      overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-75"
     >
       <ToastContainer />
-      <div className="create-account">
-        <h1>Add New Volunteer</h1>
-        <form onSubmit={handleSubmit}>
-          {/* {["firstName", "lastName", "username"].map((field) => (
-            <div key={field}>
-              <label htmlFor={field}>
-                {field
-                  .replace(/([A-Z])/g, " $1")
-                  .charAt(0)
-                  .toUpperCase() + field.replace(/([A-Z])/g, " $1").slice(1)}
-                :
-              </label>
-              <input
-                type="text"
-                id={field}
-                value={formData[field]}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          ))} */}
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+        <h1 className="text-xl font-semibold mb-4">Add New Volunteer</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="firstName">First Name:</label>
+            <label
+              htmlFor="first_name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              First Name:
+            </label>
             <input
               type="text"
-              id="firstName"
-              value={formData.firstName}
+              id="first_name"
+              value={formData.first_name}
               onChange={handleChange}
               required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
           <div>
-            <label htmlFor="lastName">Last Name:</label>
+            <label
+              htmlFor="last_name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Last Name:
+            </label>
             <input
               type="text"
-              id="lastName"
-              value={formData.lastName}
+              id="last_name"
+              value={formData.last_name}
               onChange={handleChange}
               required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
           <div>
-            <label htmlFor="username">Username:</label>
-            <div className="username-input-container">
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Username:
+            </label>
+            <div className="flex mt-1">
               <input
                 type="text"
                 id="username"
                 value={formData.username}
                 onChange={handleChange}
                 required
+                className="block w-full px-3 py-2 border border-gray-300 rounded-l-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
               <button
                 type="button"
                 onClick={generateUsername}
-                className="generate-username"
+                className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-gray-700 sm:text-sm"
               >
                 Generate Username
               </button>
             </div>
           </div>
           <div>
-            <label htmlFor="password">Password:</label>
-            <div className="password-input-container">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password:
+            </label>
+            <div className="flex mt-1">
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
                 value={formData.password}
                 onChange={handleChange}
                 required
+                className="block w-full px-3 py-2 border border-gray-300 rounded-l-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className="toggle-password"
+                className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-700 sm:text-sm"
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
               <button
                 type="button"
                 onClick={generateRandomPassword}
-                className="generate-password"
+                className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-700 sm:text-sm"
               >
                 Generate
               </button>
               <button
                 type="button"
                 onClick={copyPasswordToClipboard}
-                className="password-action-button"
+                className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-gray-700 sm:text-sm"
               >
-                Copy to Clipboard
+                Copy
               </button>
             </div>
           </div>
           <div>
-            <label htmlFor="role">Role:</label>
-            <select id="role" value={formData.role} onChange={handleChange}>
+            <label
+              htmlFor="role"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Role:
+            </label>
+            <select
+              id="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+            >
               <option value="volunteer">Volunteer</option>
               <option value="project_manager">Project Manager</option>
               <option value="hr">HR</option>
               <option value="admin">Admin</option>
             </select>
           </div>
-          <div className="button-group">
-            <button type="button" onClick={onClose} className="cancel-button">
+          <div className="flex justify-end space-x-3 mt-6">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
               Cancel
             </button>
-            <button type="submit" className="submit-button">
+            <button
+              type="submit"
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
               Save
             </button>
           </div>
         </form>
-        {error && <p className="error">{error}</p>}
-        {success && <p className="success">{success}</p>}
+        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+        {success && <p className="mt-2 text-sm text-green-600">{success}</p>}
       </div>
     </Modal>
   );
