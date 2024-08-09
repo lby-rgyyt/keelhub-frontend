@@ -8,25 +8,71 @@ const VolunteersTable = ({
   sortByRole,
   sortByStartDate,
 }) => {
+  // return (
+  //   <table>
+  //     <thead>
+  //       <tr>
+  //         <th>
+  //           <button onClick={sortByName}>Name</button>
+  //         </th>
+  //         <th>
+  //           <button onClick={sortByRole}>Role</button>
+  //         </th>
+  //         <th>
+  //           <button onClick={sortByHrs}>Start Date</button>
+  //         </th>
+  //         <th>
+  //           <button onClick={sortByStartDate}>Hours/wk</button>
+  //         </th>
+  //         <th>Status</th>
+  //         <th>Projects Assigned</th>
+  //         <th>Actions</th>
+  //       </tr>
+  //     </thead>
+  //     <VolunteerContainer volunteers={volunteers} />
+  //   </table>
+  // );
   return (
-    <table>
+    <table className="w-full border-collapse">
       <thead>
-        <tr>
-          <th>
-            <button onClick={sortByName}>Name</button>
+        <tr className="bg-gray-100 border-b border-gray-200">
+          <th className="p-3 text-left font-semibold text-gray-600">
+            <button
+              onClick={sortByName}
+              className="flex items-center hover:text-gray-900"
+            >
+              Name <span className="ml-1">⏶⏷</span>
+            </button>
           </th>
-          <th>
-            <button onClick={sortByRole}>Role</button>
+          <th className="p-3 text-left font-semibold text-gray-600">
+            <button
+              onClick={sortByRole}
+              className="flex items-center hover:text-gray-900"
+            >
+              Role <span className="ml-1">⏶⏷</span>
+            </button>
           </th>
-          <th>
-            <button onClick={sortByHrs}>Start Date</button>
+          <th className="p-3 text-left font-semibold text-gray-600">
+            <button
+              onClick={sortByStartDate}
+              className="flex items-center hover:text-gray-900"
+            >
+              Start Date <span className="ml-1">⏶⏷</span>
+            </button>
           </th>
-          <th>
-            <button onClick={sortByStartDate}>Hours/wk</button>
+          <th className="p-3 text-left font-semibold text-gray-600">
+            <button
+              onClick={sortByHrs}
+              className="flex items-center hover:text-gray-900"
+            >
+              Agreed Hrs / wk <span className="ml-1">⏶⏷</span>
+            </button>
           </th>
-          <th>Status</th>
-          <th>Projects Assigned</th>
-          <th>Actions</th>
+          <th className="p-3 text-left font-semibold text-gray-600">Status</th>
+          <th className="p-3 text-left font-semibold text-gray-600">
+            Projects Assigned
+          </th>
+          <th className="p-3 text-left font-semibold text-gray-600">Actions</th>
         </tr>
       </thead>
       <VolunteerContainer volunteers={volunteers} />

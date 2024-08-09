@@ -5,8 +5,8 @@ import CreateAccount from "../components/CreateAccount";
 import VolunteersTable from "../components/volunteers/VolunteersTable";
 import ReactPaginate from "react-paginate";
 import { UserContext } from "../context/UserContext";
-import "../styles/VolunteerDetail.css";
-import "../styles/VolunteersTable.css";
+// import "../styles/VolunteerDetail.css";
+// import "../styles/VolunteersTable.css";
 import axios from "axios";
 
 const Volunteers = () => {
@@ -212,7 +212,7 @@ const Volunteers = () => {
   };
 
   const [currentPage, setCurrentPage] = useState(0);
-  const volunteersPerPage = 3;
+  const volunteersPerPage = 8;
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
@@ -225,72 +225,168 @@ const Volunteers = () => {
   );
   const pageCount = Math.ceil(filteredVolunteers.length / volunteersPerPage);
 
+  //   return (
+  //     // <div className="dashboard-grid-container">
+  //     <div>
+  //       <div className="volunteer-actions">
+  //         <div className="filter-container">
+  //           <span className="filter-label">Filter by:</span>
+  //           <div className="filter-buttons">
+  //             <select
+  //               name="Active"
+  //               value={filter.Active}
+  //               onChange={handleFilterChange}
+  //               className="filter-button"
+  //             >
+  //               <option value="All">Active</option>
+  //               <option value={true}>Active</option>
+  //               <option value={false}>Inactive</option>
+  //             </select>
+  //             <select
+  //               name="role"
+  //               value={filter.role}
+  //               onChange={handleFilterChange}
+  //               className="filter-button"
+  //             >
+  //               <option value="">Role</option>
+  //               {jobTitles.map((jobTitle) => (
+  //                 <option key={jobTitle.id} value={jobTitle.title}>
+  //                   {jobTitle.title}
+  //                 </option>
+  //               ))}
+  //             </select>
+  //             <select
+  //               name="status"
+  //               value={filter.status}
+  //               onChange={handleFilterChange}
+  //               className="filter-button"
+  //             >
+  //               <option value="">Status</option>
+  //               <option value="pending">Pending</option>
+  //               <option value="in progress">In Progress</option>
+  //               <option value="completed">Completed</option>
+  //               <option value="unassigned">Unassigned</option>
+  //               <option value="assigned">Assigned</option>
+  //             </select>
+  //             <select
+  //               name="projects"
+  //               value={filter.projects}
+  //               onChange={handleFilterChange}
+  //               className="filter-button"
+  //             >
+  //               <option value="All">Projects</option>
+  //               <option value="Website Redesign">Website Redesign</option>
+  //               <option value="Portfolio Builder">Portfolio Builder</option>
+  //             </select>
+  //             <button
+  //               onClick={() => {
+  //                 setFilteredVolunteers(volunteers);
+  //                 setFilter(defaultFilter);
+  //               }}
+  //             >
+  //               Clear Filter
+  //             </button>
+  //           </div>
+  //         </div>
+  //         <div className="action-buttons">
+  //           <button className="assign-project-btn">Assign Project</button>
+  //           <button className="new-volunteer-btn" onClick={openModal}>
+  //             + New Volunteer
+  //           </button>
+  //         </div>
+  //       </div>
+
+  //       <VolunteersTable
+  //         volunteers={currentVolunteers}
+  //         // volunteers={filteredVolunteers}
+  //         sortByName={sortByName}
+  //         sortByHrs={sortByHrs}
+  //         sortByRole={sortByRole}
+  //         sortByStartDate={sortByStartDate}
+  //       />
+
+  //       <ReactPaginate
+  //         previousLabel={"Previous"}
+  //         nextLabel={"Next"}
+  //         pageCount={pageCount}
+  //         onPageChange={handlePageChange}
+  //         containerClassName={"pagination"}
+  //         activeClassName={"active"}
+  //       />
+  //       <div>showing {filteredVolunteers.length} results</div>
+
+  //       <CreateAccount isOpen={isModalOpen} onClose={closeModal} />
+  //     </div>
+  //   );
   return (
-    // <div className="dashboard-grid-container">
-    <div>
-      <div className="volunteer-actions">
-        <div className="filter-container">
-          <span className="filter-label">Filter by:</span>
-          <div className="filter-buttons">
-            <select
-              name="Active"
-              value={filter.Active}
-              onChange={handleFilterChange}
-              className="filter-button"
-            >
-              <option value="All">Active</option>
-              <option value={true}>Active</option>
-              <option value={false}>Inactive</option>
-            </select>
-            <select
-              name="role"
-              value={filter.role}
-              onChange={handleFilterChange}
-              className="filter-button"
-            >
-              <option value="">Role</option>
-              {jobTitles.map((jobTitle) => (
-                <option key={jobTitle.id} value={jobTitle.title}>
-                  {jobTitle.title}
-                </option>
-              ))}
-            </select>
-            <select
-              name="status"
-              value={filter.status}
-              onChange={handleFilterChange}
-              className="filter-button"
-            >
-              <option value="">Status</option>
-              <option value="pending">Pending</option>
-              <option value="in progress">In Progress</option>
-              <option value="completed">Completed</option>
-              <option value="unassigned">Unassigned</option>
-              <option value="assigned">Assigned</option>
-            </select>
-            <select
-              name="projects"
-              value={filter.projects}
-              onChange={handleFilterChange}
-              className="filter-button"
-            >
-              <option value="All">Projects</option>
-              <option value="Website Redesign">Website Redesign</option>
-              <option value="Portfolio Builder">Portfolio Builder</option>
-            </select>
-            <button
-              onClick={() => {
-                setFilteredVolunteers(volunteers);
-                setFilter(defaultFilter);
-              }}
-            >
-              Clear Filter
-            </button>
-          </div>
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex items-center space-x-4">
+          <span className="text-gray-700">Filter by:</span>
+          <select
+            name="Active"
+            value={filter.Active}
+            onChange={handleFilterChange}
+            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="All">Active</option>
+            <option value={true}>Active</option>
+            <option value={false}>Inactive</option>
+          </select>
+          <select
+            name="role"
+            value={filter.role}
+            onChange={handleFilterChange}
+            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Role</option>
+            {jobTitles.map((jobTitle) => (
+              <option key={jobTitle.id} value={jobTitle.title}>
+                {jobTitle.title}
+              </option>
+            ))}
+          </select>
+          <select
+            name="status"
+            value={filter.status}
+            onChange={handleFilterChange}
+            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Status</option>
+            <option value="pending">Pending</option>
+            <option value="in progress">In Progress</option>
+            <option value="completed">Completed</option>
+            <option value="unassigned">Unassigned</option>
+            <option value="assigned">Assigned</option>
+          </select>
+          <select
+            name="projects"
+            value={filter.projects}
+            onChange={handleFilterChange}
+            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="All">Projects</option>
+            <option value="Website Redesign">Website Redesign</option>
+            <option value="Portfolio Builder">Portfolio Builder</option>
+          </select>
+          <button
+            onClick={() => {
+              setFilteredVolunteers(volunteers);
+              setFilter(defaultFilter);
+            }}
+            className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          >
+            Clear Filter
+          </button>
         </div>
-        <div className="action-buttons">
-          <button className="assign-project-btn">Assign Project</button>
-          <button className="new-volunteer-btn" onClick={openModal}>
+        <div className="flex space-x-4">
+          <button className="bg-white text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            Assign Project
+          </button>
+          <button
+            onClick={openModal}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
             + New Volunteer
           </button>
         </div>
@@ -298,22 +394,29 @@ const Volunteers = () => {
 
       <VolunteersTable
         volunteers={currentVolunteers}
-        // volunteers={filteredVolunteers}
         sortByName={sortByName}
         sortByHrs={sortByHrs}
         sortByRole={sortByRole}
         sortByStartDate={sortByStartDate}
       />
 
-      <ReactPaginate
-        previousLabel={"Previous"}
-        nextLabel={"Next"}
-        pageCount={pageCount}
-        onPageChange={handlePageChange}
-        containerClassName={"pagination"}
-        activeClassName={"active"}
-      />
-      <div>showing {filteredVolunteers.length} results</div>
+      <div className="mt-6">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          pageCount={pageCount}
+          onPageChange={handlePageChange}
+          containerClassName={"flex justify-center space-x-2"}
+          pageClassName={"px-3 py-2 rounded border hover:bg-gray-100"}
+          activeClassName={"bg-blue-500 text-white"}
+          previousClassName={"px-3 py-2 rounded border hover:bg-gray-100"}
+          nextClassName={"px-3 py-2 rounded border hover:bg-gray-100"}
+          disabledClassName={"opacity-50 cursor-not-allowed"}
+        />
+      </div>
+      <div className="mt-4 text-center text-gray-600">
+        Showing {filteredVolunteers.length} results
+      </div>
 
       <CreateAccount isOpen={isModalOpen} onClose={closeModal} />
     </div>

@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../styles/VolunteerNotes.css";
 
-const VolunteerNotes = ({ volunteerId }) => {
+const VolunteerNotes = ({ volunteerId, currentVolunteer }) => {
   const { currentUser } = useContext(UserContext);
   const token = localStorage.getItem("token");
   const [note, setNote] = useState("");
@@ -79,41 +79,74 @@ const VolunteerNotes = ({ volunteerId }) => {
   };
 
   return (
-    <div className="volunteer-notes">
-      <div className="add-note">
-        <textarea
-          value={note}
-          onChange={handleNoteChange}
-          placeholder="Write a note..."
-        />
-        <div className="note-actions">
-          <button onClick={openModal}>View Notes ({notes.length})</button>
-          <button onClick={handleAddNote}>Add Note</button>
-        </div>
+    <div className="bg-white rounded-lg shadow-md p-6">
+      <h3 className="text-xl font-semibold mb-4">Add Note</h3>
+      <textarea
+        value={note}
+        onChange={handleNoteChange}
+        className="w-full p-2 border rounded mb-4"
+        rows="4"
+        placeholder="Write an extravagant note about a wonderful volunteer"
+      />
+      <div className="flex justify-end items-center space-x-4">
+        <button onClick={openModal} className="text-blue-600 hover:underline">
+          View Notes ({notes.length})
+        </button>
+        <button
+          onClick={handleAddNote}
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          Add
+        </button>
       </div>
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         contentLabel="Volunteer Notes"
-        className="notes-modal"
+        className="fixed inset-0 flex items-center justify-center z-50"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
       >
-        <h2>Notes for {volunteerId}</h2>
-        <div className="notes-list">
-          {notes.map((note) => (
-            <div key={note.id} className="note">
-              <div className="note-header">
-                <span className="note-title">Note {note.id}</span>
-                <span className="note-date">
-                  Created {new Date(note.created_at).toLocaleDateString()}
-                </span>
+        <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-semibold">
+              {currentVolunteer?.first_name} {currentVolunteer?.last_name} Notes
+            </h2>
+            <button
+              onClick={closeModal}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div className="space-y-6">
+            {notes.map((note, index) => (
+              <div key={note.id} className="border-b pb-4 last:border-b-0">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-medium">Note {index + 1}</span>
+                  <span className="text-sm text-gray-500">
+                    Created {new Date(note.created_at).toLocaleDateString()}
+                  </span>
+                </div>
+                <div className="text-gray-700 whitespace-pre-wrap">
+                  {note.notes}
+                </div>
               </div>
-              <div className="note-content">{note.notes}</div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-        <button className="close-button" onClick={closeModal}>
-          Close
-        </button>
       </Modal>
     </div>
   );
