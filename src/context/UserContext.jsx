@@ -34,7 +34,7 @@ export const UserProvider = ({ children }) => {
   //   }
   // }, []);
 
-  // // use access_token to get data
+  // use access_token to get data
   // const login = useGoogleLogin({
   //   onSuccess: async (response) => {
   //     try {

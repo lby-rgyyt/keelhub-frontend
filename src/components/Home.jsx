@@ -1,18 +1,45 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import keelworksLogo from "../assets/keelworks_cover.jpg";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, logout } = useContext(UserContext);
+  const { isLoggedIn, logout, login } = useContext(UserContext);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const handleLogout = () => {
     logout();
     navigate("/");
   };
+
+  const handleGoogleLoginSuccess = async (credentialResponse) => {
+    setIsLoading(true);
+    setError(null);
+
+    try{
+      const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
+
+      const response = await axios.post("http://localhost:3001/api/auth/google-login", credentialResponseDecoded);
+
+      const {token, user } = response.data;
+
+      login(user, token);
+
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Google login error:", error);
+      setError("Failed to login with Google. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+    
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -69,16 +96,11 @@ const Home = () => {
                 </Link>
               )}
             </div>
-            <div>
+            <div >
               <GoogleLogin
-                onSuccess={(credentialResponse) => {
-                  const credentialResponseDecoded = jwtDecode(
-                    credentialResponse.credential
-                  );
-                  console.log(credentialResponseDecoded);
-                }}
+                onSuccess={handleGoogleLoginSuccess}
                 onError={() => {
-                  console.log("Login Failed");
+                  setError("Google Login Failed");
                 }}
               />
             </div>

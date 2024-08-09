@@ -21,6 +21,7 @@ function Login() {
       );
 
       const { token, user } = response.data;
+      // await getFromGoogle
       login(user, token);
       navigate("/dashboard");
     } catch (error) {

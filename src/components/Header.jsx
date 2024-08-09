@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import { HiOutlineBell, HiChevronDown } from 'react-icons/hi';
 import { UserContext } from "../context/UserContext";
@@ -10,6 +10,7 @@ function Header() {
   const { isLoggedIn, currentUser, logout } = useContext(UserContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+
   const handleLogout = () => {
     logout();
     navigate("/");
@@ -18,6 +19,10 @@ function Header() {
   const handleProfile = () => {
     navigate("/profile");
   };
+
+  useEffect(() => {
+    console.log(currentUser);
+  }, [currentUser]);
 
   // const getBreadcrumbs = () => {
   //   const pathnames = location.pathname.split('/').filter((x) => x);
@@ -64,10 +69,10 @@ function Header() {
               >
                 <img
                   className="h-8 w-8 rounded-full object-cover"
-                  src={currentUser.profilePic || defaultUser}
-                  alt={currentUser.firstName}
+                  src={currentUser.profile_pic || defaultUser}
+                  alt={currentUser.first_name}
                 />
-                <span>{currentUser.firstName} {currentUser.lastName}</span>
+                <span>{currentUser.first_name} {currentUser.last_name}</span>
                 <HiChevronDown className="h-4 w-4" />
               </button>
               {isLoggedIn && isDropdownOpen && (
