@@ -30,7 +30,7 @@ const Home = () => {
       const {token, user } = response.data;
 
       login(user, token);
-
+      
       navigate("/dashboard");
     } catch (error) {
       console.error("Google login error:", error);
