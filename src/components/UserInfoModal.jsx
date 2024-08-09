@@ -114,32 +114,42 @@ const UserInfoModal = ({
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       contentLabel="User Info"
+      className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center"
+      overlayClassName="fixed inset-0"
     >
-      <div className="user-info-modal">
-        <h2>Update User Information</h2>
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-4">Update User Information</h2>
         <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="first_name">First Name</label>
+          <div className="mb-4">
+            <label htmlFor="first_name" className="block mb-1">
+              First Name
+            </label>
             <input
               type="text"
               name="first_name"
               value={userInfo.first_name}
               onChange={handleChange}
               placeholder="First Name"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
             />
           </div>
-          <div>
-            <label htmlFor="last_name">Last Name</label>
+          <div className="mb-4">
+            <label htmlFor="last_name" className="block mb-1">
+              Last Name
+            </label>
             <input
               type="text"
               name="last_name"
               value={userInfo.last_name}
               onChange={handleChange}
               placeholder="Last Name"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
             />
           </div>
-          <div>
-            <label htmlFor="personal_email">Personal Email</label>
+          <div className="mb-4">
+            <label htmlFor="personal_email" className="block mb-1">
+              Personal Email
+            </label>
             <input
               type="email"
               name="personal_email"
@@ -147,10 +157,13 @@ const UserInfoModal = ({
               onChange={handleChange}
               placeholder="Personal Email"
               disabled
+              className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500"
             />
           </div>
-          <div>
-            <label htmlFor="role">Role</label>
+          <div className="mb-4">
+            <label htmlFor="role" className="block mb-1">
+              Role
+            </label>
             <input
               type="text"
               name="role"
@@ -158,60 +171,65 @@ const UserInfoModal = ({
               onChange={handleChange}
               placeholder="Role"
               disabled
+              className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500"
             />
           </div>
-          <div>
-            <label htmlFor="city">City</label>
+          <div className="mb-4">
+            <label htmlFor="city" className="block mb-1">
+              City
+            </label>
             <input
               type="text"
               name="city"
               value={userInfo.city}
               onChange={handleChange}
               placeholder="City"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
             />
           </div>
-          <div>
-            <label htmlFor="phone">Phone</label>
+          <div className="mb-4">
+            <label htmlFor="phone" className="block mb-1">
+              Phone
+            </label>
             <input
               type="text"
               name="phone"
               value={userInfo.phone}
               onChange={handleChange}
               placeholder="Phone"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
             />
           </div>
-          <div>
-            <label htmlFor="timezone">Timezone</label>
+          <div className="mb-6">
+            <label htmlFor="timezone" className="block mb-1">
+              Timezone
+            </label>
             <input
               type="text"
               name="timezone"
               value={userInfo.timezone}
               onChange={handleChange}
               placeholder="Timezone"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
             />
           </div>
-          <button type="submit">Update User Info</button>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+          >
+            Update User Info
+          </button>
         </form>
         {isManual && (
           <button
             onClick={() => {
               setIsUserModalOpen(false);
             }}
+            className="mt-4 text-blue-500 hover:text-blue-700"
           >
-            close
+            Close
           </button>
         )}
-        {/* {showVolunteerInfo && (
-          <VolunteerInfoModal
-            userId={currentUser.id}
-            isOpen={showVolunteerInfo}
-            setIsVolunteerModalOpen={setShowVolunteerInfo}
-            onRequestClose={() => {
-              setShowVolunteerInfo(false);
-            }}
-            isManual={false}
-          />
-        )} */}
       </div>
     </Modal>
   );

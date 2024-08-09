@@ -1,15 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { HiOutlineBell, HiChevronDown } from 'react-icons/hi';
+import { HiOutlineBell, HiChevronDown } from "react-icons/hi";
 import { UserContext } from "../context/UserContext";
-import defaultUser from "../assets/defaultUser.jpg"; 
+import defaultUser from "../assets/defaultUser.jpg";
 
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const { isLoggedIn, currentUser, logout } = useContext(UserContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
 
   const handleLogout = () => {
     logout();
@@ -47,12 +46,14 @@ function Header() {
   // };
 
   return (
-    <header className="bg-white shadow-sm fixed w-full z-10" style={{ left: '280px' }}> {/* Adjusted left position */}
+    <header className=" shadow-sm fixed w-full z-10" style={{ left: "280px" }}>
+      {" "}
+      {/* Adjusted left position */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <nav className="flex" aria-label="Breadcrumb">
             {/* <ol className="flex items-center space-x-4"> */}
-              {/* <li>
+            {/* <li>
                 <a href="/" className="text-blue-600 hover:text-blue-800">Home</a>
               </li>
               {getBreadcrumbs()}
@@ -63,7 +64,7 @@ function Header() {
               <HiOutlineBell className="h-6 w-6" />
             </button>
             <div className="relative">
-              <button 
+              <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="flex items-center space-x-2 text-sm focus:outline-none"
               >
@@ -72,7 +73,9 @@ function Header() {
                   src={currentUser.profile_pic || defaultUser}
                   alt={currentUser.first_name}
                 />
-                <span>{currentUser.first_name} {currentUser.last_name}</span>
+                <span>
+                  {currentUser.first_name} {currentUser.last_name}
+                </span>
                 <HiChevronDown className="h-4 w-4" />
               </button>
               {isLoggedIn && isDropdownOpen && (

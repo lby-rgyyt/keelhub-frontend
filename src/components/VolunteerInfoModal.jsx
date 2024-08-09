@@ -144,32 +144,47 @@ const VolunteerInfoModal = ({
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       contentLabel="Volunteer Info"
+      className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center"
+      overlayClassName="fixed inset-0"
     >
-      <div className="volunteer-info-modal">
-        <h2>Update Volunteer Information</h2>
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-4">
+          Update Volunteer Information
+        </h2>
         <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="skills">Skills</label>
+          <div className="mb-4">
+            <label htmlFor="skills" className="block mb-1">
+              Skills
+            </label>
             {volunteerInfo.skills.map((skill, index) => (
-              <div key={index}>
+              <div key={index} className="flex items-center mb-2">
                 <input
                   type="text"
                   name="skills"
                   value={skill}
                   onChange={(e) => handleSkillsChange(e, index)}
                   placeholder="Skill"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 />
-                <button type="button" onClick={() => handleRemoveSkill(index)}>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveSkill(index)}
+                  className="ml-2 text-red-500 hover:text-red-700"
+                >
                   Remove
                 </button>
               </div>
             ))}
-            <button type="button" onClick={handleAddSkill}>
+            <button
+              type="button"
+              onClick={handleAddSkill}
+              className="mt-2 text-blue-500 hover:text-blue-700"
+            >
               Add Skill
             </button>
           </div>
-          <div>
-            <label htmlFor="time_committed_per_week">
+          <div className="mb-4">
+            <label htmlFor="time_committed_per_week" className="block mb-1">
               Time Committed per Week (hours)
             </label>
             <input
@@ -178,14 +193,18 @@ const VolunteerInfoModal = ({
               value={volunteerInfo.time_committed_per_week}
               onChange={handleChange}
               placeholder="Time Committed per Week"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
             />
           </div>
-          <div>
-            <label htmlFor="status">Status</label>
+          <div className="mb-6">
+            <label htmlFor="status" className="block mb-1">
+              Status
+            </label>
             <select
               name="status"
               value={volunteerInfo.status}
               onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
             >
               {Object.keys(statusOptions).map((key) => (
                 <option key={key} value={key}>
@@ -194,15 +213,21 @@ const VolunteerInfoModal = ({
               ))}
             </select>
           </div>
-          <button type="submit">Update Volunteer Info</button>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+          >
+            Update Volunteer Info
+          </button>
         </form>
         {isManual && (
           <button
             onClick={() => {
               setIsVolunteerModalOpen(false);
             }}
+            className="mt-4 text-blue-500 hover:text-blue-700"
           >
-            close
+            Close
           </button>
         )}
       </div>
