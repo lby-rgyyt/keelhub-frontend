@@ -23,7 +23,7 @@ const VolunteerNotes = ({ volunteerId, currentVolunteer }) => {
         `http://localhost:3001/api/user-notes/getAllNotes`,
         {
           params: {
-            created_by: currentUser.id,
+            //created_by: currentUser.id,
             volunteer_id: volunteerId,
           },
         },
@@ -137,7 +137,8 @@ const VolunteerNotes = ({ volunteerId, currentVolunteer }) => {
                 <div className="flex justify-between items-center mb-2">
                   <span className="font-medium">Note {index + 1}</span>
                   <span className="text-sm text-gray-500">
-                    Created {new Date(note.created_at).toLocaleDateString()}
+                    Created at {new Date(note.created_at).toLocaleDateString()}{" "}
+                    by {note.User.first_name + " " + note.User.last_name}
                   </span>
                 </div>
                 <div className="text-gray-700 whitespace-pre-wrap">
