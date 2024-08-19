@@ -17,6 +17,8 @@ import { UserContext } from "./context/UserContext";
 import { ToastContainer, toast } from "react-toastify";
 import Volunteers from "./pages/Volunteers";
 import VolunteerDetail from "./components/volunteers/VolunteerDetail";
+import UserAccessRoles from "./pages/UserAccessRoles";
+import UserAccessList from "./components/useraccess/UserAccessList";
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);
@@ -116,6 +118,30 @@ function App() {
             isLoggedIn ? (
               <Layout>
                 <VolunteerDetail />
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/user-access/roles"
+          element={
+            isLoggedIn ? (
+              <Layout>
+                <UserAccessRoles />
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/user-access/list"
+          element={
+            isLoggedIn ? (
+              <Layout>
+                <UserAccessList />
               </Layout>
             ) : (
               <Navigate to="/login" />

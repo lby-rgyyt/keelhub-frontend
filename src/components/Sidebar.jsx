@@ -7,11 +7,15 @@ import {
   HiTemplate,
   HiViewGrid,
   HiUserGroup,
+  HiUser,
 } from "react-icons/hi";
+import { TbUserBolt } from "react-icons/tb";
+import { MdLockOutline } from "react-icons/md";
 import keelWorksLogoBlack from "../assets/logo.png";
 
 function Sidebar() {
-  const [onboardingOpen, setOnboardingOpen] = useState(true);
+  const [onboardingOpen, setOnboardingOpen] = useState(false);
+  const [userAccessOpen, setUserAccessOpen] = useState(false);
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
@@ -116,6 +120,63 @@ function Sidebar() {
               <HiUserGroup className="sidebar-icon" />
               <span>Volunteers</span>
             </Link>
+          </li>
+
+          <li>
+            <button
+              onClick={() => setUserAccessOpen(!userAccessOpen)}
+              className={`sidebar-link w-full justify-between ${
+                userAccessOpen ? "bg-blue-100 text-blue-600" : ""
+              }`}
+            >
+              <div className="flex items-center">
+                <TbUserBolt className="sidebar-icon" />
+                <span>User Access</span>
+              </div>
+              <svg
+                className={`h-5 w-5 transform transition-transform duration-200 ${
+                  userAccessOpen ? "rotate-180" : ""
+                }`}
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+            {userAccessOpen && (
+              <ul className="pl-6 mt-2 space-y-1">
+                <li>
+                  <Link
+                    to="/user-access/roles"
+                    className={`sidebar-link ${
+                      isActive("/user-access/roles")
+                        ? "bg-blue-50 text-blue-600"
+                        : ""
+                    }`}
+                  >
+                    <HiUser className="sidebar-icon" />
+                    <span>Roles</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/user-access/access"
+                    className={`sidebar-link ${
+                      isActive("/user-access/access")
+                        ? "bg-blue-50 text-blue-600"
+                        : ""
+                    }`}
+                  >
+                    <MdLockOutline className="sidebar-icon" />
+                    <span>Access</span>
+                  </Link>
+                </li>
+              </ul>
+            )}
           </li>
         </ul>
       </nav>

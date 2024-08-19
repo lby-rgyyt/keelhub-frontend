@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { toast } from "react-toastify";
 
 const VolunteerInfoModal = ({
   userId,
@@ -92,7 +93,7 @@ const VolunteerInfoModal = ({
         }
       );
     }
-
+    toast.success("Update successfully!");
     onRequestClose(); // Close the modal immediately after confirmation
 
     try {
