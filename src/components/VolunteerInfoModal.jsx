@@ -19,7 +19,6 @@ const VolunteerInfoModal = ({
   const [volunteerInfo, setVolunteerInfo] = useState({
     skills: [],
     time_committed_per_week: 0,
-    status: "pending",
   });
   const [isNewVolunteer, setIsNewVolunteer] = useState(false);
 
@@ -34,8 +33,8 @@ const VolunteerInfoModal = ({
             },
           }
         );
-        const { skills, time_committed_per_week, status } = response.data;
-        setVolunteerInfo({ skills, time_committed_per_week, status });
+        const { skills, time_committed_per_week } = response.data;
+        setVolunteerInfo({ skills, time_committed_per_week });
         setIsNewVolunteer(false); // Volunteer exists
       } catch (error) {
         if (error.response && error.response.status === 404) {
@@ -97,25 +96,6 @@ const VolunteerInfoModal = ({
     onRequestClose(); // Close the modal immediately after confirmation
 
     try {
-      // if (isNewVolunteer) {
-      // Create new volunteer info
-      // await axios.post(`http://localhost:3001/api/volunteers`, { userId, ...volunteerInfo }, {
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // });
-      // } else {
-      // Update existing volunteer info
-      // await axios.put(
-      //   `http://localhost:3001/api/volunteers/${userId}`,
-      //   volunteerInfo,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   }
-      // );
-      // }
       const response = await axios.put(
         `http://localhost:3001/api/volunteers/${userId}`,
         volunteerInfo,
@@ -197,7 +177,7 @@ const VolunteerInfoModal = ({
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
             />
           </div>
-          <div className="mb-6">
+          {/* <div className="mb-6">
             <label htmlFor="status" className="block mb-1">
               Status
             </label>
@@ -213,7 +193,7 @@ const VolunteerInfoModal = ({
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
           <button
             type="submit"
             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
