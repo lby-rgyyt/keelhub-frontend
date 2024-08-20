@@ -2,11 +2,14 @@ import React from "react";
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import RoleCard from "../components/useraccess/RoleCard";
+import { UserContext } from "../context/UserContext";
 
 const UserAccessRoles = () => {
   const [adminList, setAdminList] = useState([]);
   const [volunteerList, setVolunteerList] = useState([]);
   const [hrList, sethrList] = useState([]);
+
+  const { currentUser } = useContext(UserContext);
 
   const token = localStorage.getItem("token");
 
@@ -56,6 +59,14 @@ const UserAccessRoles = () => {
     console.log("volunteer: ", volunteerList);
     console.log("hr: ", hrList);
   }, []);
+
+  if (!["admin", "hr"].includes(currentUser.role)) {
+    return (
+      <p className="text-center mt-8 text-lg text-gray-600">
+        You do not have permission to view this page.
+      </p>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6">
