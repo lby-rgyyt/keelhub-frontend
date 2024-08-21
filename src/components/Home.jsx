@@ -32,10 +32,16 @@ const Home = () => {
       );
 
       const { token, user } = response.data;
+      console.log("user info google2fapage", user.is_2fa_enabled);
+
+      if (user.is_2fa_enabled) {
+        navigate("/google2fapage");
+      } else {
+        navigate("/google2fapage");
+      }
 
       login(user, token);
-      
-      navigate("/dashboard");
+      // navigate("/dashboard");
     } catch (error) {
       console.error("Google login error:", error);
       setError("Failed to login with Google. Please try again.");
