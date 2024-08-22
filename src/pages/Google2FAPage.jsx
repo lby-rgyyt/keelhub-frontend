@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
@@ -6,20 +6,45 @@ import { UserContext } from "../context/UserContext";
 const Google2FAPage = () => {
   const navigate = useNavigate();
   const [token, setToken] = useState("");
-  //   const [error, setError] = useState("");
+  const [qrCode, setQrCode] = useState("");
+  const [secretCode, set2secretCode] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleVerify = () => {
-    // e.preventDefault();
-    // setError("");
-    // try {
-    //   const response = await axios.post(
-    //     "http://localhost:3001/api/auth/verify",
-    //     { username}
-    //   );
-    navigate("/dashboard");
-    // } catch (error) {
-    //   setError(error.response?.data?.error || "Verify error occurred");
-    // }
+  const handleVerify = async () => {
+    try {
+      console.log("generate qr code secret22:", secretCode);
+      const response = await axios.post(
+        "http://localhost:3001/api/auth/verify2fa",
+        {
+          secret: secretCode,
+          token: token,
+        }
+      );
+      setMessage(response.data);
+      setMessage(response.data);
+      navigate("/dashboard");
+    } catch (error) {
+      setMessage("Verification failed. Please try again.");
+    }
+  };
+
+  useEffect(() => {
+    generateQrCode();
+  }, []);
+
+  const generateQrCode = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:3001/api/auth/generate2fa`
+      );
+      console.log("generate qr code response:", response);
+      const { qrCode, secret } = response.data;
+      set2secretCode(secret);
+      setQrCode(qrCode);
+      console.log("generate qr code secret value:", secretCode);
+    } catch (error) {
+      console.error("Error generating QR code:", error);
+    }
   };
 
   return (
@@ -66,7 +91,11 @@ const Google2FAPage = () => {
           <p className="mt-3 text-xl text-gray-600 sm:mt-5">
             Open the Google Authenicator and scan the QR code
           </p>
-          <img className="h-20 w-20 rounded-full object-cover"></img>
+          <img
+            style={{ width: "200px", height: "200px" }}
+            className="h-20 w-20 rounded-full object-cover"
+            src={qrCode}
+          ></img>
           <p className="mt-3 text-xl text-gray-600 sm:mt-5">
             Or enter this code if you can't scan the QR code
           </p>
@@ -92,11 +121,12 @@ const Google2FAPage = () => {
             </div>
             <div>
               <button
-                type="submit"
+                onClick={handleVerify}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Continue
               </button>
+              {message && <p>{message}</p>}
             </div>
           </form>
         </div>
