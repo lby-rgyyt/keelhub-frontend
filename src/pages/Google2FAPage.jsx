@@ -110,9 +110,12 @@ const Google2FAPage = () => {
                 <p className="mt-3 text-xl text-gray-600 sm:mt-5">
                   Or enter this code if you can't scan the QR code
                 </p>
+                <p>{secretCode}</p>
               </div>
             ) : (
-              <p>Using the Google Authenticator app get your one time code.</p>
+              <p className="text-sm">
+                Using the Google Authenticator app get your one time code.
+              </p>
             )}
           </div>
 
