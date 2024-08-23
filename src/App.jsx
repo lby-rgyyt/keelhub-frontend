@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Home from "./components/Home";
 import Login from "./pages/Login";
+import Google2FAPage from "./pages/Google2FAPage";
 import CreateAccount from "./components/CreateAccount";
 import Layout from "./components/Layout";
 import Profile from "./components/Profile";
@@ -27,6 +28,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/google2fapage" element={<Google2FAPage />} />
         <Route path="/" element={<Home />} />
 
         {/* Public route that renders the Layout without sign-in */}

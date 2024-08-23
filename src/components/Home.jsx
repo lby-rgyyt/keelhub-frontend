@@ -32,10 +32,8 @@ const Home = () => {
       );
 
       const { token, user } = response.data;
-
       login(user, token);
-      
-      navigate("/dashboard");
+      navigate("/google2fapage");
     } catch (error) {
       console.error("Google login error:", error);
       setError("Failed to login with Google. Please try again.");
