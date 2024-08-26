@@ -9,8 +9,9 @@ import {
   HiUserGroup,
   HiUser,
 } from "react-icons/hi";
-import { TbUserBolt } from "react-icons/tb";
-import { MdLockOutline } from "react-icons/md";
+import { IoMdEye } from "react-icons/io";
+import { PiUserSquareFill } from "react-icons/pi";
+import { ImWrench } from "react-icons/im";
 import keelWorksLogoBlack from "../assets/logo.png";
 
 function Sidebar() {
@@ -130,7 +131,7 @@ function Sidebar() {
               }`}
             >
               <div className="flex items-center">
-                <TbUserBolt className="sidebar-icon" />
+                <IoMdEye className="sidebar-icon" />
                 <span>User Access</span>
               </div>
               <svg
@@ -158,7 +159,7 @@ function Sidebar() {
                         : ""
                     }`}
                   >
-                    <HiUser className="sidebar-icon" />
+                    <PiUserSquareFill className="sidebar-icon" />
                     <span>Roles</span>
                   </Link>
                 </li>
@@ -171,7 +172,7 @@ function Sidebar() {
                         : ""
                     }`}
                   >
-                    <MdLockOutline className="sidebar-icon" />
+                    <ImWrench className="sidebar-icon" />
                     <span>Access</span>
                   </Link>
                 </li>
