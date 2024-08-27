@@ -235,6 +235,7 @@ const SendInvitationModal = ({ isOpen, onClose }) => {
                 value={formData.username}
                 onChange={handleChange}
                 readOnly
+                required
                 className="flex-grow p-2 border rounded-l bg-gray-200 text-gray-600 border-gray-300 cursor-not-allowed"
                 placeholder="Please generate username automatically"
               />

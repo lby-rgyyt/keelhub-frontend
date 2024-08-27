@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import img from "../../assets/defaultUser.jpg";
 import { FaInfoCircle, FaChevronDown, FaEllipsisH } from "react-icons/fa";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import ResendInviteModal from "./ResendInviteModal";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { sendEmail } from "../../context/utils";
@@ -12,6 +13,7 @@ const User = ({ user }) => {
   const token = localStorage.getItem("token");
   const [activeDropdown, setActiveDropdown] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isResendModalOpen, setIsResendModalOpen] = useState(false);
 
   const getStatusStyle = (status) => {
     switch (status.toLowerCase()) {
@@ -78,9 +80,14 @@ const User = ({ user }) => {
   };
 
   const handleResendInvite = () => {
-    sendEmail(user.personal_email);
-    toast.success("Invitation Resend Successfully!");
+    setIsResendModalOpen(true);
     setActiveDropdown(false);
+  };
+
+  const confirmResend = () => {
+    sendEmail(user.personal_email);
+    toast.success("Invitation Resent Successfully!");
+    setIsResendModalOpen(false);
   };
 
   return (
@@ -153,6 +160,12 @@ const User = ({ user }) => {
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={confirmDelete}
         userName={`${user.first_name} ${user.last_name}`}
+      />
+      <ResendInviteModal
+        isOpen={isResendModalOpen}
+        onClose={() => setIsResendModalOpen(false)}
+        user={user}
+        onResend={confirmResend}
       />
     </>
   );
