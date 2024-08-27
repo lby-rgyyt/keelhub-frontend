@@ -32,7 +32,7 @@ const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
     last_name: "",
     username: "",
     personal_email: "",
-    role: "",
+    role: "volunteer",
     access_level: "1",
     password: "password",
     status: "Invitation Sent",
@@ -67,6 +67,12 @@ const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    console.log(formData);
+  };
+
+  const handleLevelClick = (level) => {
+    setFormData((prev) => ({ ...prev, access_level: level }));
+    console.log(formData);
   };
 
   const generateUsername = async () => {
@@ -248,7 +254,6 @@ const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
               onChange={handleChange}
               className="w-full p-2 border rounded"
             >
-              <option value="">Choose Role</option>
               <option value="volunteer">Volunteer</option>
               <option value="hr">HR</option>
               <option value="admin">Admin</option>
@@ -256,6 +261,33 @@ const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
           </div>
 
           <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Choose a level of access that this user will have
+            </label>
+            {levels.map((level) => (
+              <div
+                key={level.level}
+                className={`p-3 mb-2 rounded-lg cursor-pointer ${
+                  formData.access_level === level.level
+                    ? "border border-blue-500"
+                    : "border border-gray-200"
+                }`}
+                onClick={() => handleLevelClick(level.level)}
+              >
+                <div className="flex items-center">
+                  <LevelIcon
+                    level={level.level}
+                    isSelected={formData.access_level === level.level}
+                  />
+                  <div className="ml-3">
+                    <p className="font-medium">Level {level.level}</p>
+                    <p className="text-sm text-gray-500">{level.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Choose a level of access that this user will have
             </label>
@@ -281,7 +313,7 @@ const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
 
           {error && <p className="text-red-500 mb-4">{error}</p>}
 
