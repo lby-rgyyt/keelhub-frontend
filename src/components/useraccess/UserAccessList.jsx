@@ -48,12 +48,33 @@ const AccessLevelBadge = ({ user, onChange }) => {
 const UserAccessList = () => {
   const token = localStorage.getItem("token");
   const location = useLocation();
-  const { users: initialUsers, role } = location.state || {};
-  const [users, setUsers] = useState(initialUsers);
+  const { role } = location.state || {};
+  const [users, setUsers] = useState([]);
   const [nameSort, setNameSort] = useState(false);
-  console.log("users:", users);
   const [currentPage, setCurrentPage] = useState(0);
   const usersPerPage = 8;
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/api/users/by-role/${role}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setUsers(response.data);
+      } catch (err) {
+        console.error("Error fetching users:", err);
+      }
+    };
+
+    if (role) {
+      fetchUsers();
+    }
+  }, []);
 
   const offset = currentPage * usersPerPage;
   const currentUsers = users.slice(offset, offset + usersPerPage);

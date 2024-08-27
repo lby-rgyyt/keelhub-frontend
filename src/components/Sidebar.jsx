@@ -12,6 +12,7 @@ import {
 import { IoMdEye } from "react-icons/io";
 import { PiUserSquareFill } from "react-icons/pi";
 import { ImWrench } from "react-icons/im";
+import { FaUserPlus } from "react-icons/fa6";
 import keelWorksLogoBlack from "../assets/logo.png";
 
 function Sidebar() {
@@ -161,6 +162,19 @@ function Sidebar() {
                   >
                     <PiUserSquareFill className="sidebar-icon" />
                     <span>Roles</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/user-access/invites"
+                    className={`sidebar-link ${
+                      isActive("/user-access/access")
+                        ? "bg-blue-50 text-blue-600"
+                        : ""
+                    }`}
+                  >
+                    <FaUserPlus className="sidebar-icon" />
+                    <span>Invites</span>
                   </Link>
                 </li>
                 <li>

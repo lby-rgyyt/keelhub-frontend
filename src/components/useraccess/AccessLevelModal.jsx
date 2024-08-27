@@ -2,6 +2,7 @@ import { useState } from "react";
 import img from "../../assets/defaultUser.jpg";
 
 const AccessLevelModal = ({ isOpen, onClose, user, onConfirm }) => {
+  const token = localStorage.getItem("token");
   const [selectedLevel, setSelectedLevel] = useState(user.access_level);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -96,33 +97,6 @@ const AccessLevelModal = ({ isOpen, onClose, user, onConfirm }) => {
           {user.first_name} {user.last_name} - {user.role}
         </span>
       </div>
-      {/* {levels.map((level) => (
-        <div
-          key={level.level}
-          className={`p-3 mb-2 rounded-lg cursor-pointer ${
-            selectedLevel === level.level
-              ? "border border-blue-500"
-              : "border border-gray-200"
-          }`}
-          onClick={() => setSelectedLevel(level.level)}
-        >
-          <div className="flex items-center">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 ${
-                selectedLevel === level.level
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-100 text-blue-500"
-              }`}
-            >
-              {level.level}
-            </div>
-            <div>
-              <p className="font-medium">Level {level.level}</p>
-              <p className="text-sm text-gray-500">{level.description}</p>
-            </div>
-          </div>
-        </div>
-      ))} */}
       {levels.map((level) => (
         <div
           key={level.level}

@@ -14,6 +14,7 @@ const CreateAccount = ({ isOpen, onClose }) => {
     password: "",
     email: "",
     role: "volunteer",
+    status: "Invitation Sent",
     access_level: "1",
     first_name: "",
     last_name: "",

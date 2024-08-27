@@ -9,7 +9,7 @@ const UpdateRoleModal = ({ isOpen, onClose, user }) => {
   const [error, setError] = useState(null);
   const token = localStorage.getItem("token");
 
-  const roles = ["Admin", "HR"];
+  const roles = ["Admin", "hr"];
 
   const handleSave = async () => {
     setIsLoading(true);
@@ -24,10 +24,8 @@ const UpdateRoleModal = ({ isOpen, onClose, user }) => {
           },
         }
       );
-      toast.success(
-        "Updated Successfully! Please go back to Roles and refresh the page."
-      );
       onClose();
+      window.location.reload();
     } catch (err) {
       setError("Failed to update role. Please try again.");
       console.error("Error updating role:", err);

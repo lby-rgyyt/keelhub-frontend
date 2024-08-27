@@ -21,6 +21,7 @@ import VolunteerDetail from "./components/volunteers/VolunteerDetail";
 import UserAccessRoles from "./pages/UserAccessRoles";
 import UserAccessList from "./components/useraccess/UserAccessList";
 import ManageAccess from "./components/useraccess/ManageAccess";
+import InviteUser from "./pages/InviteUser";
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);
@@ -157,6 +158,18 @@ function App() {
             isLoggedIn ? (
               <Layout>
                 <ManageAccess />
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/user-access/invites"
+          element={
+            isLoggedIn ? (
+              <Layout>
+                <InviteUser />
               </Layout>
             ) : (
               <Navigate to="/login" />
