@@ -137,8 +137,6 @@ const InviteUser = () => {
   const currentUsers = filteredUsers.slice(offset, offset + usersPerPage);
   const pageCount = Math.ceil(filteredUsers.length / usersPerPage);
 
-  const sendEmail = () => {};
-
   return (
     <div className="p-6">
       <h1>Invite Users</h1>
@@ -202,7 +200,6 @@ const InviteUser = () => {
         users={currentUsers}
         sortByName={sortByName}
         sortByInviteDate={sortByInviteDate}
-        sendEmail={sendEmail}
       />
 
       <div className="mt-6">
@@ -228,7 +225,6 @@ const InviteUser = () => {
         onClose={() => {
           setIsInvitationModalOpen(false);
         }}
-        sendEmail={sendEmail}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { sendEmail } from "../../context/utils";
 
 const LevelIcon = ({ level, isSelected }) => (
   <div className="w-12 h-12 flex items-center justify-center">
@@ -24,7 +25,7 @@ const LevelIcon = ({ level, isSelected }) => (
   </div>
 );
 
-const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
+const SendInvitationModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const blank_user = {
@@ -56,6 +57,31 @@ const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
         "Full control, including system settings and user management.",
     },
   ];
+
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    const checkFormValidity = () => {
+      const {
+        first_name,
+        last_name,
+        username,
+        personal_email,
+        role,
+        access_level,
+      } = formData;
+      setIsFormValid(
+        first_name &&
+          last_name &&
+          username &&
+          personal_email &&
+          role &&
+          access_level
+      );
+    };
+
+    checkFormValidity();
+  }, [formData]);
 
   useEffect(() => {
     if (isOpen) {
@@ -119,7 +145,11 @@ const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
   // Send Email
   const handleSubmit = async (e) => {
     e.preventDefault();
-    sendEmail();
+    if (!isFormValid) {
+      toast.warning("Please fill in all required fields.", { autoClose: 2000 });
+      return;
+    }
+    sendEmail(formData.personal_email);
     try {
       const response = await axios.post(
         "http://localhost:3001/api/users",
@@ -152,9 +182,7 @@ const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
         "User created successfully! Invitation email has been sent!"
       );
       setFormData(blank_user);
-      setTimeout(() => {
-        onClose();
-      }, 1000);
+      onClose();
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred");
     }
@@ -290,7 +318,12 @@ const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              className={`px-4 py-2 text-white rounded ${
+                isFormValid
+                  ? "bg-blue-600 hover:bg-blue-700"
+                  : "bg-gray-400 cursor-not-allowed"
+              }`}
+              //   disabled={!isFormValid}
             >
               Send Invite
             </button>

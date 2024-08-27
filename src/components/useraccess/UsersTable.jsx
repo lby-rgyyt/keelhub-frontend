@@ -1,7 +1,7 @@
 import React from "react";
 import UserContainer from "./UserContainer";
 
-const UsersTable = ({ users, sortByName, sortByInviteDate, sendEmail }) => {
+const UsersTable = ({ users, sortByName, sortByInviteDate }) => {
   return (
     <table className="w-full border-collapse">
       <thead>
@@ -35,7 +35,7 @@ const UsersTable = ({ users, sortByName, sortByInviteDate, sendEmail }) => {
           <th className="p-3 text-left font-semibold text-gray-600">Actions</th>
         </tr>
       </thead>
-      <UserContainer users={users} sendEmail={sendEmail} />
+      <UserContainer users={users} />
     </table>
   );
 };

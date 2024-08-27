@@ -6,8 +6,9 @@ import { FaInfoCircle, FaChevronDown, FaEllipsisH } from "react-icons/fa";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { sendEmail } from "../../context/utils";
 
-const User = ({ user, sendEmail }) => {
+const User = ({ user }) => {
   const token = localStorage.getItem("token");
   const [activeDropdown, setActiveDropdown] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -71,12 +72,14 @@ const User = ({ user, sendEmail }) => {
       console.log(error);
     }
 
-    toast.success("Delete Successfully!");
+    // toast.success("Delete Successfully!");
     setIsDeleteModalOpen(false);
+    window.location.reload();
   };
 
   const handleResendInvite = () => {
-    sendEmail();
+    sendEmail(user.personal_email);
+    toast.success("Invitation Resend Successfully!");
     setActiveDropdown(false);
   };
 
