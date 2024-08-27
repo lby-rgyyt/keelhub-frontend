@@ -67,17 +67,14 @@ const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    console.log(formData);
   };
 
   const handleLevelClick = (level) => {
     setFormData((prev) => ({ ...prev, access_level: level }));
-    console.log(formData);
   };
 
   const generateUsername = async () => {
     const { first_name, last_name } = formData;
-    console.log(formData, first_name, last_name);
     if (!first_name || !last_name) {
       setError("Please enter both first name and last name");
       return;
@@ -115,7 +112,6 @@ const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
       }
     }
 
-    console.log("username:", username);
     toast.success("Generate Username Successfully", { autoClose: 1000 });
     setFormData((prevState) => ({ ...prevState, username }));
   };
@@ -169,12 +165,6 @@ const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Invite User</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            &times;
-          </button>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -287,33 +277,6 @@ const SendInvitationModal = ({ isOpen, onClose, sendEmail }) => {
               </div>
             ))}
           </div>
-          {/* <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Choose a level of access that this user will have
-            </label>
-            {levels.map((level) => (
-              <div
-                key={level.level}
-                className={`p-3 mb-2 rounded-lg cursor-pointer ${
-                  selectedLevel === level.level
-                    ? "border border-blue-500"
-                    : "border border-gray-200"
-                }`}
-                onClick={() => setSelectedLevel(level.level)}
-              >
-                <div className="flex items-center">
-                  <LevelIcon
-                    level={level.level}
-                    isSelected={selectedLevel === level.level}
-                  />
-                  <div className="ml-3">
-                    <p className="font-medium">Level {level.level}</p>
-                    <p className="text-sm text-gray-500">{level.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div> */}
 
           {error && <p className="text-red-500 mb-4">{error}</p>}
 
