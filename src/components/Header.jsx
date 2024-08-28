@@ -20,8 +20,12 @@ function Header() {
   };
 
   useEffect(() => {
-    console.log(currentUser);
+    // console.log(currentUser);
   }, [currentUser]);
+
+  const pageName = location.pathname.split('/').filter((x) => x).map(name => name.charAt(0).toUpperCase() + name.slice(1)).join(' '); 
+
+  
 
   // const getBreadcrumbs = () => {
   //   const pathnames = location.pathname.split('/').filter((x) => x);
@@ -47,10 +51,11 @@ function Header() {
 
   return (
     <header className=" shadow-sm fixed w-full z-10" style={{ left: "280px" }}>
-      {" "}
       {/* Adjusted left position */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div className="flex items-center justify-between">
+      <div className="max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+      <div className="flex items-center justify-between">
+      {pageName}
+
           <nav className="flex" aria-label="Breadcrumb">
             {/* <ol className="flex items-center space-x-4"> */}
             {/* <li>

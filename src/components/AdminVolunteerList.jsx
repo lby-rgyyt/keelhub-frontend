@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Table, Dropdown, Menu, message } from 'antd';
+import { HiOutlineTemplate } from 'react-icons/hi';
 import axios from 'axios';
 
 const AdminVolunteerList = () => {
@@ -12,6 +13,10 @@ const AdminVolunteerList = () => {
         showSizeChanger: true,
         pageSizeOptions: ['10', '20', '50', '100']
     });
+    const [tasks, setTasks] = useState([]);
+    const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+    const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
 
     const fetchVolunteers = useCallback(async (params = { current: 1, pageSize: 10 }) => {
         setLoading(true);
@@ -47,6 +52,11 @@ const AdminVolunteerList = () => {
             current: newPagination.current,
             pageSize: newPagination.pageSize,
         });
+    };
+
+    const handleTemplateClick = (task) => {
+        setSelectedTask(task);
+        setIsTemplateModalOpen(true);
     };
 
     const columns = [
@@ -88,7 +98,13 @@ const AdminVolunteerList = () => {
             title: 'Template',
             dataIndex: ['currentTask', 'description'],
             key: 'description',
-            render: (description) => description || 'N/A',
+            render: (description) => (<button 
+                className="text-gray-500 hover:text-gray-700" 
+                onClick={() => handleTemplateClick(currentTask)}
+                title="View Template"
+              >
+                <HiOutlineTemplate size={20} />
+              </button>) || 'N/A',
         },
         {
             title: 'Actions',
