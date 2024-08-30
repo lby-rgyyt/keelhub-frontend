@@ -12,7 +12,6 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-
   const handleLogout = () => {
     logout();
     navigate("/");
@@ -22,16 +21,19 @@ const Home = () => {
     setIsLoading(true);
     setError(null);
 
-    try{
-      const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
+    try {
+      const credentialResponseDecoded = jwtDecode(
+        credentialResponse.credential
+      );
 
-      const response = await axios.post("http://localhost:3001/api/auth/google-login", credentialResponseDecoded);
+      const response = await axios.post(
+        "http://localhost:3001/api/auth/google-login",
+        credentialResponseDecoded
+      );
 
-      const {token, user } = response.data;
-
+      const { token, user } = response.data;
       login(user, token);
-      
-      navigate("/dashboard");
+      navigate("/google2fapage");
     } catch (error) {
       console.error("Google login error:", error);
       setError("Failed to login with Google. Please try again.");
@@ -39,7 +41,6 @@ const Home = () => {
       setIsLoading(false);
     }
   };
-    
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -96,7 +97,7 @@ const Home = () => {
                 </Link>
               )}
             </div>
-            <div >
+            <div>
               <GoogleLogin
                 onSuccess={handleGoogleLoginSuccess}
                 onError={() => {
