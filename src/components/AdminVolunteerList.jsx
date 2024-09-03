@@ -185,13 +185,31 @@ const AdminVolunteerList = () => {
       message.error("Failed to approve task");
     }
   };
-
-  const handleReject = (id) => {
-    // Implement reject logic
+  
+  const handleReject = async (id) => {
+      try {
+          const response = await axios.put(`http://localhost:3001/api/volunteer-tasks/volunteers/${id}/reject-task`);
+          if (response.status === 200) {
+              message.success('Task Rejected');
+          }
+      }
+      catch (error) {
+          console.error('Error rejecting task:', error);
+          message.error('Failed to reject task');
+      }
   };
-
-  const handleExtendDueDate = (id) => {
-    // Implement extend due date logic
+  
+  const handleExtendDueDate = async (id) => {
+      try {
+          const response = await axios.put(`http://localhost:3001/api/volunteer-tasks/volunteers/${id}/extend-due-date`);
+          if (response.status === 200) {
+              message.success('Due date extended successfully');
+          }
+      }
+      catch (error) {
+          console.error('Error extending task:', error);
+          message.error('Failed to extend due date');
+      }
   };
 
   return (
