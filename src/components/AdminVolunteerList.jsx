@@ -99,10 +99,10 @@ const AdminVolunteerList = () => {
       key: "currentTask",
       render: (currentTask) => (
         <div>
-          {selectedTask ? (
+          {currentTask ? (
             <>
-              <div>{selectedTask.taskName}</div>
-              <div>{selectedTask.progress}</div>
+              <div>{currentTask.taskName}</div>
+              <div>{currentTask.progress}</div>
             </>
           ) : (
             "No active task"
@@ -114,7 +114,11 @@ const AdminVolunteerList = () => {
       title: "Due Date",
       dataIndex: ["currentTask", "dueDate"],
       key: "dueDate",
-      render: (date) => (date ? new Date(date).toLocaleDateString() : "N/A"),
+      render: (date) => {
+        if (!date) return "N/A";
+        const utcDate = new Date(date + 'T00:00:00Z');
+        return utcDate.toLocaleDateString('en-US', { timeZone: 'UTC' });
+      },
     },
     {
       title: "Template",

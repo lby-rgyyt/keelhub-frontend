@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { Navigate } from "react-router-dom";
+import axios from "axios";
 import {
   HiUsers,
   HiClipboardList,
@@ -19,6 +20,8 @@ const Dashboard = () => {
 
   const [second, setSecond] = useState(false);
   const [first, setFirst] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (currentUser && !currentUser.hasLoggedIn) {
@@ -42,6 +45,26 @@ const Dashboard = () => {
     { name: "Upcoming Events", stat: "3", icon: HiCalendar },
     { name: "Project Completion", stat: "58%", icon: HiChartBar },
   ];
+
+  const handleStartOnboarding = async () => {
+    if (!currentUser || !currentUser.id) {
+      setError("User ID not available");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.post(`http://localhost:3001/api/volunteer-tasks/onboarding/${currentUser.id}`);
+      alert("Onboarding process started successfully!");
+    } catch (err) {
+      console.error("Error starting onboarding:", err);
+      setError("Failed to start onboarding. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -83,6 +106,15 @@ const Dashboard = () => {
                     >
                       View profile
                     </a>
+                    {currentUser.role === "volunteer" && (
+                      <button
+                        className="flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        onClick={handleStartOnboarding}
+                        disabled={isLoading}
+                      >
+                        {isLoading ? "Starting..." : "Start Onboarding"}
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -122,8 +154,6 @@ const Dashboard = () => {
               ))}
             </div>
           </div>
-
-          {/* Add more dashboard widgets here */}
         </div>
       </main>
 
