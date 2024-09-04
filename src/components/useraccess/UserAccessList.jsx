@@ -210,7 +210,7 @@ const UserAccessList = () => {
                   <div>
                     <div>{`${user.first_name} ${user.last_name}`}</div>
                     <div className="text-sm text-gray-500">
-                      {user.personal_email || user.username}
+                      {user.username || user.personal_email}
                     </div>
                   </div>
                 </div>

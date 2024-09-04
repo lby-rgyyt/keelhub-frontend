@@ -22,6 +22,7 @@ import UserAccessRoles from "./pages/UserAccessRoles";
 import UserAccessList from "./components/useraccess/UserAccessList";
 import ManageAccess from "./components/useraccess/ManageAccess";
 import InviteUser from "./pages/InviteUser";
+
 import TwoFactorAuth from "./components/TwoFactorAuth";
 import TwoFactorSetUp from "./components/TwoFactorSetUp";
 import AdminDetails from "./components/AdminDetails";
@@ -31,7 +32,8 @@ import AccountSuccess from "./components/AccountSuccess";
 import VolunteerHome from "./pages/VolunteerHome";
 import NotificationsPage from "./components/notifications/NotificationPage";
 
-
+import ProjectsList from "./pages/ProjectsList";
+import ProjectDetail from "./components/projects/ProjectDetail";
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);
@@ -48,8 +50,6 @@ function App() {
         <Route path="/verified" element={<VerifiedPage />} />
         <Route path="/verify-fail" element={<VerificationFail />} />
         <Route path="/acc-success" element={<AccountSuccess />} />
-
-
 
         {/* Public route that renders the Layout without sign-in */}
         <Route
@@ -214,6 +214,30 @@ function App() {
             isLoggedIn ? (
               <Layout>
                 <InviteUser />
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/project"
+          element={
+            isLoggedIn ? (
+              <Layout>
+                <ProjectsList />
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/project-detail/"
+          element={
+            isLoggedIn ? (
+              <Layout>
+                <ProjectDetail />
               </Layout>
             ) : (
               <Navigate to="/login" />

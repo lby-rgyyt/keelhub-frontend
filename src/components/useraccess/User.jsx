@@ -86,6 +86,7 @@ const User = ({ user }) => {
 
   const confirmResend = () => {
     sendEmail(user.personal_email);
+    // todo: update createdAt
     toast.success("Invitation Resent Successfully!");
     setIsResendModalOpen(false);
   };
