@@ -24,7 +24,9 @@
     "react-oauth": "^0.0.1",
     "react-paginate": "^8.2.0",
     "react-router-dom": "^6.25.1",
-    "react-toastify": "^10.0.5"
+    "react-toastify": "^10.0.5",
+    "recharts": "^2.12.7",
+    "tailwind-merge": "^2.5.2"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
