@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Home from "./components/Home";
 import Login from "./pages/Login";
+import Google2FAPage from "./pages/Google2FAPage";
 import CreateAccount from "./components/CreateAccount";
 import Layout from "./components/Layout";
 import Profile from "./components/Profile";
@@ -17,12 +18,17 @@ import { UserContext } from "./context/UserContext";
 import { ToastContainer, toast } from "react-toastify";
 import Volunteers from "./pages/Volunteers";
 import VolunteerDetail from "./components/volunteers/VolunteerDetail";
+import UserAccessRoles from "./pages/UserAccessRoles";
+import UserAccessList from "./components/useraccess/UserAccessList";
+import ManageAccess from "./components/useraccess/ManageAccess";
+import InviteUser from "./pages/InviteUser";
 import TwoFactorAuth from "./components/TwoFactorAuth";
 import TwoFactorSetUp from "./components/TwoFactorSetUp";
 import AdminDetails from "./components/AdminDetails";
 import VerifiedPage from "./components/VerifiedPage";
 import VerificationFail from "./components/VerificationFail";
 import AccountSuccess from "./components/AccountSuccess";
+
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);
@@ -31,6 +37,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/google2fapage" element={<Google2FAPage />} />
         <Route path="/" element={<Home />} />
         <Route path="/2fa" element={<TwoFactorAuth />} />
         <Route path="/2fa-setup" element={<TwoFactorSetUp />} />
@@ -130,6 +137,54 @@ function App() {
             isLoggedIn ? (
               <Layout>
                 <VolunteerDetail />
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/user-access/roles"
+          element={
+            isLoggedIn ? (
+              <Layout>
+                <UserAccessRoles />
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/user-access/list"
+          element={
+            isLoggedIn ? (
+              <Layout>
+                <UserAccessList />
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/user-access/manage-access"
+          element={
+            isLoggedIn ? (
+              <Layout>
+                <ManageAccess />
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/user-access/invites"
+          element={
+            isLoggedIn ? (
+              <Layout>
+                <InviteUser />
               </Layout>
             ) : (
               <Navigate to="/login" />

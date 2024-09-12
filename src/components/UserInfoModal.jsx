@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import axios from "axios";
 import VolunteerInfoModal from "./VolunteerInfoModal";
 import { UserContext } from "../context/UserContext";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 const UserInfoModal = ({
   userId,
@@ -14,6 +14,7 @@ const UserInfoModal = ({
 }) => {
   const { login } = useContext(UserContext);
   const token = localStorage.getItem("token");
+  
   const [currentUser, setCurrentUser] = useState(null);
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,7 +27,6 @@ const UserInfoModal = ({
             },
           }
         );
-        console.log("current user: ", response.data);
         setCurrentUser(response.data);
       } catch (error) {
         console.log(error);
