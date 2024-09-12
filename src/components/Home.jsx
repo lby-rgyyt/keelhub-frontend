@@ -8,32 +8,36 @@ import axios from "axios";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, logout, login } = useContext(UserContext);
+  const { isLoggedIn, logout, login, currentUser } = useContext(UserContext);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-  };
 
   const handleGoogleLoginSuccess = async (credentialResponse) => {
     setIsLoading(true);
     setError(null);
 
-    try {
-      const credentialResponseDecoded = jwtDecode(
-        credentialResponse.credential
-      );
+    try{
+      const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
 
-      const response = await axios.post(
-        "http://localhost:3001/api/auth/google-login",
-        credentialResponseDecoded
-      );
+      const response = await axios.post("http://localhost:3001/api/auth/google-login", credentialResponseDecoded);
 
-      const { token, user } = response.data;
-      login(user, token);
-      navigate("/google2fapage");
+      const {token, user } = response.data;
+
+      console.log(response.data)
+
+      await login(user, token);
+
+      // navigate("/dashboard");
+      // console.log("user.secret_2fa", user.secret_2fa)
+      navigate(user && user.secret_2fa ? "/2fa" : '2fa-setup', {replace:true})
+
+      // if(currentUser && currentUser.secret_2fa!==null){
+      //   navigate('/2fa')
+      // }
+      // else if(currentUser && currentUser.secret_2fa==null){
+      //   navigate('/2fa-setup')
+      // }
+
     } catch (error) {
       console.error("Google login error:", error);
       setError("Failed to login with Google. Please try again.");
@@ -41,75 +45,51 @@ const Home = () => {
       setIsLoading(false);
     }
   };
+    
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <header className="bg-white shadow-md">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center">
-            <img className="h-10 w-auto" src={keelworksLogo} alt="KeelWorks" />
-          </div>
-          <div className="flex items-center space-x-4">
-            {isLoggedIn ? (
-              <>
-                <Link
-                  to="/dashboard"
-                  className="text-blue-600 hover:text-blue-800 font-medium"
-                >
-                  Dashboard
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <Link
-                to="/login"
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
-              >
-                Login
-              </Link>
-            )}
-          </div>
-        </nav>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
-              KeelHub
-              <span className="block text-blue-600">Volunteer Management</span>
-            </h1>
-            <p className="mt-3 text-xl text-gray-600 sm:mt-5">
-              Streamlining volunteer management for the KeelWorks Foundation.
-            </p>
-            <div className="mt-8 sm:mt-10">
-              {!isLoggedIn && (
-                <Link
-                  to="/login"
-                  className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-700 transition duration-300"
-                >
-                  Get started
-                </Link>
-              )}
-            </div>
-            <div>
-              <GoogleLogin
-                onSuccess={handleGoogleLoginSuccess}
-                onError={() => {
-                  setError("Google Login Failed");
-                }}
-              />
+      <div className="flex mx-auto">
+        <div className="relative w-2/5 h-screen z-50">
+          <img className="absolute w-full h-full" src="src\assets\image.png" />
+          <div className="absolute inset-0 flex justify-center bg-opacity-75 p-8 h-1/2">
+            <div className=" p-20 text-white mt-40">
+              <p className="">Never doubt that a small group of thoughtful, committed citizens can change the world; 
+                indeed, it's the only thing that ever has.
+              </p>
+              <p className="pt-5">- Margaret Mead</p>
             </div>
           </div>
         </div>
-      </main>
-    </div>
-  );
+        <div className="bg-gray-100 w-3/5 h-screen flex flex-col items-start justify-start">
+          <div className="w-[530px] h-[300px] pr-15 mt-auto pl-10 mb-[130px]">
+            <h1 className="text-black pl-4 pt-4 text-6xl">Hello!</h1>
+            <h3 className="pl-5 pt-3 text-gray-600">Use the Google button to login</h3>
+            <div className="pl-5 pt-10 border-black">
+             <GoogleLogin
+                onSuccess={handleGoogleLoginSuccess}
+                onError={() => {
+                 setError("Google Login Failed");
+               }}
+             />
+            <button onClick={()=>{navigate("/login");}} className="flex w-[200px] ml-[10px] mt-10 justify-center py-auto rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Login</button>
+
+           </div>
+          </div>
+            <footer className="bg-gray-100 w-full flex flex-col items-center pb-4">
+              <div className="flex space-x-2 text-xs">
+                <a href="#" className="text-blue-500 hover:underline">Terms of Use</a>
+                <a href="#" className="text-blue-500 hover:underline">Privacy Policy</a>
+              </div>
+              <p className="text-gray-600 text-xs">This site is protected by reCAPTCHA Enterprise. 
+              <a href="#" className="text-blue-500 hover:underline"> Privacy Policy </a> and 
+              <a href="#" className="text-blue-500 hover:underline"> Terms of Use </a> 
+                apply
+              </p>
+            </footer>
+        </div>
+      </div>
+
+  )
 };
 
 export default Home;

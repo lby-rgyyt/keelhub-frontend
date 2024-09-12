@@ -160,7 +160,7 @@ const Dashboard = () => {
   }, [currentUser, showToast]);
 
   if (!currentUser) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
   const currentVolunteers = useMemo(() => {
     if (selectedColumn === 0) {

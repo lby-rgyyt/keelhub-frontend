@@ -22,6 +22,13 @@ import UserAccessRoles from "./pages/UserAccessRoles";
 import UserAccessList from "./components/useraccess/UserAccessList";
 import ManageAccess from "./components/useraccess/ManageAccess";
 import InviteUser from "./pages/InviteUser";
+import TwoFactorAuth from "./components/TwoFactorAuth";
+import TwoFactorSetUp from "./components/TwoFactorSetUp";
+import AdminDetails from "./components/AdminDetails";
+import VerifiedPage from "./components/VerifiedPage";
+import VerificationFail from "./components/VerificationFail";
+import AccountSuccess from "./components/AccountSuccess";
+
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);
@@ -32,6 +39,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/google2fapage" element={<Google2FAPage />} />
         <Route path="/" element={<Home />} />
+        <Route path="/2fa" element={<TwoFactorAuth />} />
+        <Route path="/2fa-setup" element={<TwoFactorSetUp />} />
+        <Route path="/admin-details" element={<AdminDetails />} />
+        <Route path="/verified" element={<VerifiedPage />} />
+        <Route path="/verify-fail" element={<VerificationFail />} />
+        <Route path="/acc-success" element={<AccountSuccess />} />
+
+
 
         {/* Public route that renders the Layout without sign-in */}
         <Route
