@@ -8,15 +8,9 @@ import axios from "axios";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, logout, login } = useContext(UserContext);
+  const { isLoggedIn, logout, login, currentUser } = useContext(UserContext);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
-
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-  };
 
   const handleGoogleLoginSuccess = async (credentialResponse) => {
     setIsLoading(true);
@@ -29,9 +23,21 @@ const Home = () => {
 
       const {token, user } = response.data;
 
-      login(user, token);
-      
-      navigate("/dashboard");
+      console.log(response.data)
+
+      await login(user, token);
+
+      // navigate("/dashboard");
+      // console.log("user.secret_2fa", user.secret_2fa)
+      navigate(user && user.secret_2fa ? "/2fa" : '2fa-setup', {replace:true})
+
+      // if(currentUser && currentUser.secret_2fa!==null){
+      //   navigate('/2fa')
+      // }
+      // else if(currentUser && currentUser.secret_2fa==null){
+      //   navigate('/2fa-setup')
+      // }
+
     } catch (error) {
       console.error("Google login error:", error);
       setError("Failed to login with Google. Please try again.");
@@ -42,7 +48,7 @@ const Home = () => {
     
 
   return (
-      <div className="container flex mx-auto">
+      <div className="flex mx-auto">
         <div className="relative w-2/5 h-screen z-50">
           <img className="absolute w-full h-full" src="src\assets\image.png" />
           <div className="absolute inset-0 flex justify-center bg-opacity-75 p-8 h-1/2">
@@ -65,6 +71,8 @@ const Home = () => {
                  setError("Google Login Failed");
                }}
              />
+            <button onClick={()=>{navigate("/login");}} className="flex w-[200px] ml-[10px] mt-10 justify-center py-auto rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Login</button>
+
            </div>
           </div>
             <footer className="bg-gray-100 w-full flex flex-col items-center pb-4">
@@ -73,7 +81,7 @@ const Home = () => {
                 <a href="#" className="text-blue-500 hover:underline">Privacy Policy</a>
               </div>
               <p className="text-gray-600 text-xs">This site is protected by reCAPTCHA Enterprise. 
-              <a href="#" className="text-blue-500 hover:underline">Privacy Policy </a> and 
+              <a href="#" className="text-blue-500 hover:underline"> Privacy Policy </a> and 
               <a href="#" className="text-blue-500 hover:underline"> Terms of Use </a> 
                 apply
               </p>

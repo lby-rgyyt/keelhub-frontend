@@ -8,7 +8,7 @@ const Dashboard = () => {
   const { currentUser } = useContext(UserContext);
 
   if (!currentUser) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   const stats = [

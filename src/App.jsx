@@ -17,6 +17,12 @@ import { UserContext } from "./context/UserContext";
 import { ToastContainer, toast } from "react-toastify";
 import Volunteers from "./pages/Volunteers";
 import VolunteerDetail from "./components/volunteers/VolunteerDetail";
+import TwoFactorAuth from "./components/TwoFactorAuth";
+import TwoFactorSetUp from "./components/TwoFactorSetUp";
+import AdminDetails from "./components/AdminDetails";
+import VerifiedPage from "./components/VerifiedPage";
+import VerificationFail from "./components/VerificationFail";
+import AccountSuccess from "./components/AccountSuccess";
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);
@@ -26,6 +32,14 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
+        <Route path="/2fa" element={<TwoFactorAuth />} />
+        <Route path="/2fa-setup" element={<TwoFactorSetUp />} />
+        <Route path="/admin-details" element={<AdminDetails />} />
+        <Route path="/verified" element={<VerifiedPage />} />
+        <Route path="/verify-fail" element={<VerificationFail />} />
+        <Route path="/acc-success" element={<AccountSuccess />} />
+
+
 
         {/* Public route that renders the Layout without sign-in */}
         <Route
