@@ -29,6 +29,14 @@ const AdminDetails = () =>{
 
     const USA_Visa_List = ["F1","O1", "H1B", "L1","N/A"]
 
+    // TO GET THE TOKEN
+    // https://www.universal-tutorial.com/api/getaccesstoken
+    // Headers: Accept:application/json, api-token:9UE2oIs29kHP1Otm5FRiH3d1jtJ-UG_qNuoaj3UM0FFSDrZIDrnsyRQMNQkI640i0VY, user-email:kshitij.chaudhari@keelworks.org
+
+    // CALL TO GET ALL COUNTRIES
+    // https://www.universal-tutorial.com/api/countries/
+    // Headers: Authorization (Bearer "the token we get from the previous api call"), Accept:application/json
+
     let auth_token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJrc2hpdGlqLmNoYXVkaGFyaUBrZWVsd29ya3Mub3JnIiwiYXBpX3Rva2VuIjoiOVVFMm9JczI5a0hQMU90bTVGUmlIM2QxanRKLVVHX3FOdW9hajNVTTBGRlNEclpJRHJuc3lSUU1OUWtJNjQwaTBWWSJ9LCJleHAiOjE3MjYyNTgxODF9.TzQ006WioiWu5HtKaxt9WNqx2zagp1sEu58q4YNFAWg"
 
     const FetchCountries = async() => {
