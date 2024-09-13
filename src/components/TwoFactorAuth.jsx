@@ -21,24 +21,25 @@ const TwoFactorAuth = () => {
     },[])
 
 
-    const handleSubmit = async() =>{
-      // console.log("clicked Continue")
-      try{
-          let response = await axios.post('http://localhost:3001/api/auth/verify2FA', {
-            token2FA,
-            secret,
-            currentUser
-          }); 
-          // localStorage.setItem();
-          if(response.status==200){
-            navigate('/admin-details',{ replace: true });
+    const handleSubmit = async () => {
+      try {
+        let response = await axios.post('http://localhost:3001/api/auth/verify2FA', {
+          token2FA,
+          secret,
+          currentUser,
+        });
+    
+        if (response.status === 200) {
+          if (currentUser.hasLoggedIn) {
+            navigate('/dashboard', { replace: true });
+          } else {
+            navigate('/admin-details', { replace: true });
           }
-      }
-      catch(e){
-        // console.log("TRY CATCH",e)
+        }
+      } catch (e) {
         setError(true);
       }
-    }
+    };
 
     return(
         <div className="flex mx-auto">

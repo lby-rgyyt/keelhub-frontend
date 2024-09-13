@@ -128,15 +128,6 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (currentUser && !currentUser.hasLoggedIn) {
-      alert(
-        "Welcome to Keelworks! Here is some information you need to fill in order to proceed."
-      );
-      setFirst(true);
-      if (currentUser.role === "volunteer") {
-        setSecond(true);
-      }
-    }
     if (currentUser && currentUser.hasLoggedIn && showToast) {
       toast.info("You have 3 unread notifications!", {
         onClose: () => setShowToast(false)

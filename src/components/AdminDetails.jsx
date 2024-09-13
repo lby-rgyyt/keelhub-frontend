@@ -27,7 +27,7 @@ const AdminDetails = () =>{
     const [compulsory, setCompulsory] = useState(false);
     const navigate = useNavigate();
 
-    const USA_Visa_List = ["F1","O1", "H1B", "L1"]
+    const USA_Visa_List = ["F1","O1", "H1B", "L1","N/A"]
 
     let auth_token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJrc2hpdGlqLmNoYXVkaGFyaUBrZWVsd29ya3Mub3JnIiwiYXBpX3Rva2VuIjoiOVVFMm9JczI5a0hQMU90bTVGUmlIM2QxanRKLVVHX3FOdW9hajNVTTBGRlNEclpJRHJuc3lSUU1OUWtJNjQwaTBWWSJ9LCJleHAiOjE3MjYyNTgxODF9.TzQ006WioiWu5HtKaxt9WNqx2zagp1sEu58q4YNFAWg"
 
@@ -64,15 +64,29 @@ const AdminDetails = () =>{
         setStateList(list_states.data);
     }
 
-    const handleSubmit = async() => {
-        if(country === '' || timezone == '' ||phone == ''||visaType == ''
-          || state==''
-        ){
+    const handleSubmit = async () => {
+      if (country === '' || timezone === '' || phone === '' || visaType === '' || state === '') {
         setCompulsory(true);
+      } else {
+        try {
+          const userData = {
+            country,
+            state,
+            timezone,
+            visa_type: visaType,
+            phone,
+            hasLoggedIn:true,
+          };
+    
+          await axios.put(`http://localhost:3001/api/users/${currentUser.id}`, userData);
+    
+          navigate('/acc-success');
+        } catch (error) {
+          console.error("Error updating user data:", error);
         }
-        else
-        navigate('/acc-success')
-    }
+      }
+    };
+    
 
     useEffect(()=>{
         if(!currentUser){
@@ -139,7 +153,6 @@ const AdminDetails = () =>{
                   <div className="mt-2">
                     <select onChange={(e) => {
                       setState(e.target.value);
-                      console.log("State is set to: ", e.target.value);
                     }} defaultValue='default' className="block w-full rounded-md border-0 px-3.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                       <option value='default' disabled>Select..</option>
                       {stateList ? stateList.map((state) => (
@@ -155,7 +168,6 @@ const AdminDetails = () =>{
                   <div className="mt-2">
                     <select onChange={(e) => {
                       setTimezone(e.target.value);
-                      console.log("Timezone is set to: ", e.target.value);
                     }} defaultValue='default' className="block w-full rounded-md border-0 px-3.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                       <option value='default' disabled>Select..</option>
                       {timezoneList ? timezoneList.map((timezone) => (
@@ -171,7 +183,6 @@ const AdminDetails = () =>{
                   <div className="mt-2">
                     <select onChange={(e) => {
                       setVisaType(e.target.value);
-                      console.log("Visa Type is set to: ", e.target.value);
                     }} defaultValue='default' className="block w-full rounded-md border-0 px-3.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                       <option value='default' disabled>Select..</option>
                       {USA_Visa_List ? USA_Visa_List.map((visa_type) => (
@@ -190,7 +201,6 @@ const AdminDetails = () =>{
                       value='default'
                       onChange={(value, data, event, formattedValue	)=>{
                           setPhone(formattedValue)
-                          console.log("phone",phone);
                         }
                       }
                     />
