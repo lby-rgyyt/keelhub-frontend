@@ -11,14 +11,15 @@ const TaskModal = ({ isOpen, closeModal, onSubmit, initialTask = {}, isTemplateV
 
     useEffect(() => {
         if (initialTask) {
+          console.log(initialTask);
           setTask({
-            task_name: initialTask.taskName || '',
+            task_name: initialTask.task_name || '',
             template: initialTask.description || '', 
           });
-          if (initialTask.taskName == 'All onboarding tasks completed') {
+          if (initialTask.task_name == 'All onboarding tasks completed') {
             setTask({
-              task_name: initialTask.taskName,
-              template:  initialTask.taskName
+              task_name: initialTask.task_name,
+              template:  initialTask.task_name
             });
           }
         }
