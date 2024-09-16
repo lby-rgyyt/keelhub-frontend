@@ -15,12 +15,12 @@ const TaskModal = ({ isOpen, closeModal, onSubmit, initialTask = {}, isTemplateV
             task_name: initialTask.taskName || '',
             template: initialTask.description || '', 
           });
-        }
-        if (initialTask.taskName == 'All onboarding tasks completed') {
-          setTask({
-            task_name: initialTask.taskName,
-            template:  initialTask.taskName
-          });
+          if (initialTask.taskName == 'All onboarding tasks completed') {
+            setTask({
+              task_name: initialTask.taskName,
+              template:  initialTask.taskName
+            });
+          }
         }
       }, [initialTask]);
   
