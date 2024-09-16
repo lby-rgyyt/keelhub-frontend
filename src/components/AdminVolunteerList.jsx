@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Table, Dropdown, Menu, message } from "antd";
-import { HiOutlineTemplate } from "react-icons/hi";
+import { HiOutlineClipboardList } from "react-icons/hi";
 import TaskModal from "./TaskModal";
 import axios from "axios";
 
@@ -94,46 +94,49 @@ const AdminVolunteerList = () => {
       ),
     },
     {
-      title: "Current Task",
-      dataIndex: "currentTask",
-      key: "currentTask",
-      render: (currentTask) => (
-        <div>
-          {currentTask ? (
-            <>
-              <div>{currentTask.taskName}</div>
-              <div>{currentTask.progress}</div>
-            </>
-          ) : (
-            "No active task"
-          )}
-        </div>
-      ),
+      title: "Status",
+      dataIndex: ["currentTask", "status"],
+      key: "status",
     },
     {
       title: "Due Date",
       dataIndex: ["currentTask", "dueDate"],
       key: "dueDate",
-      render: (date) => {
-        if (!date) return "N/A";
-        const utcDate = new Date(date + 'T00:00:00Z');
-        return utcDate.toLocaleDateString('en-US', { timeZone: 'UTC' });
-      },
+      render: (date) => (date ? new Date(date).toLocaleDateString() : "N/A"),
     },
     {
-      title: "Template",
-      dataIndex: ["currentTask", "description"],
-      key: "description",
-      render: (description) =>
-        (
+      title: "Current Task",
+      dataIndex: "currentTask",
+      key: "currentTask",
+      width: 450,
+      render: (currentTask) => (
+<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      {currentTask ? (
+        <>
+          <div>
+            <div>{currentTask.taskName}</div>
+            <div>{currentTask.progress}</div>
+          </div>
           <button
             className="text-gray-500 hover:text-gray-700"
-            onClick={() => handleTemplateClick(selectedTask)}
-            title="View Template"
+            onClick={() => handleTemplateClick(currentTask)}
+            title="View Description"
+            style={{paddingRight:'50px'}}
           >
-            <HiOutlineTemplate size={20} />
+            <HiOutlineClipboardList size={20} />
           </button>
-        ) || "N/A",
+        </>
+      ) : (
+        "No active task"
+      )}
+    </div>
+      ),
+    },
+    {
+      title: "Date Created",
+      dataIndex: ["currentTask", "createdAt"],
+      key: "createdAt",
+      render: (date) => (date ? new Date(date).toLocaleDateString() : "N/A"),
     },
     {
       title: "Actions",

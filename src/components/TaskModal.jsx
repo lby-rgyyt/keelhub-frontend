@@ -12,8 +12,14 @@ const TaskModal = ({ isOpen, closeModal, onSubmit, initialTask = {}, isTemplateV
     useEffect(() => {
         if (initialTask) {
           setTask({
-            task_name: initialTask.task_name || '',
+            task_name: initialTask.taskName || '',
             template: initialTask.description || '', 
+          });
+        }
+        if (initialTask.taskName == 'All onboarding tasks completed') {
+          setTask({
+            task_name: initialTask.taskName,
+            template:  initialTask.taskName
           });
         }
       }, [initialTask]);
