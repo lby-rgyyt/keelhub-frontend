@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Table, Dropdown, Menu, message } from "antd";
 import { HiOutlineClipboardList } from "react-icons/hi";
-import TaskModal from "./TaskModal";
+import ExtendDueDateModal from "./ExtendDueDateModal";
 import axios from "axios";
 
 const AdminVolunteerList = () => {
@@ -15,9 +15,10 @@ const AdminVolunteerList = () => {
     pageSizeOptions: ["10", "20", "50", "100"],
   });
   const [tasks, setTasks] = useState([]);
-  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const [isExtendDueDateModalOpen, setIsExtendDueDateModalOpen] = useState(false);
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const fetchVolunteers = useCallback(
     async (params = { current: 1, pageSize: 10 }) => {
@@ -69,7 +70,29 @@ const AdminVolunteerList = () => {
   const handleEditClick = (task) => {
     setSelectedTask(task);
     setIsEditMode(true);
-    setIsTaskModalOpen(true);
+    setIsExtendDueDateModalOpen(true);
+  };
+
+  const handleEditTaskSubmit = async (updatedTask) => {
+    try {
+      if (updatedTask.extendDueDate > 0) {
+      const taskDetailsResponse = await axios.get(`http://localhost:3001/api/volunteer-tasks/${selectedTask.taskId}`);      
+      const { volunteer_id } = taskDetailsResponse.data;
+      const response = await axios.put(`http://localhost:3001/api/volunteer-tasks/volunteers/${volunteer_id}/extend-due-date`, {
+          extendDays: updatedTask.extendDueDate,
+      });
+
+      if (response.status === 200) {
+          message.success('Task edited successfully');
+          fetchVolunteers(pagination); 
+          setIsExtendDueDateModalOpen(false);
+          setIsEditMode(false);
+      }
+    }
+    } catch (error) {
+        console.error('Error extending due date:', error);
+        message.error('Failed to extend due date');
+    }
   };
 
   const handleCopyTemplate = () => {
@@ -110,26 +133,26 @@ const AdminVolunteerList = () => {
       key: "currentTask",
       width: 450,
       render: (currentTask) => (
-<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      {currentTask ? (
-        <>
-          <div>
-            <div>{currentTask.task_name}</div>
-            <div>{currentTask.progress}</div>
-          </div>
-          <button
-            className="text-gray-500 hover:text-gray-700"
-            onClick={() => handleTemplateClick(currentTask)}
-            title="View Description"
-            style={{paddingRight:'50px'}}
-          >
-            <HiOutlineClipboardList size={20} />
-          </button>
-        </>
-      ) : (
-        "No active task"
-      )}
-    </div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {currentTask ? (
+            <>
+              <div>
+                <div>{currentTask.task_name}</div>
+                <div>{currentTask.progress}</div>
+              </div>
+              <button
+                className="text-gray-500 hover:text-gray-700"
+                onClick={() => handleTemplateClick(currentTask)}
+                title="View Description"
+                style={{paddingRight:'50px'}}
+              >
+                <HiOutlineClipboardList size={20} />
+              </button>
+            </>
+          ) : (
+            "No active task"
+          )}
+        </div>
       ),
     },
     {
@@ -141,31 +164,41 @@ const AdminVolunteerList = () => {
     {
       title: "Actions",
       key: "actions",
-      render: (text, record) => (
-        <Dropdown
-          menu={{
-            items: [
-              {
-                key: "1",
-                label: "Approve",
-                onClick: () => handleApprove(record.id),
-              },
-              {
-                key: "2",
-                label: "Reject",
-                onClick: () => handleReject(record.id),
-              },
-              {
-                key: "3",
-                label: "Extend Due Date",
-                onClick: () => handleExtendDueDate(record.id),
-              },
-            ],
-          }}
-        >
-          <a onClick={(e) => e.preventDefault()}>Actions</a>
-        </Dropdown>
-      ),
+      render: (text, record) => {
+        const isEditable = record.currentTask && record.currentTask.task_name !== 'All onboarding tasks completed';
+        
+        const menuItems = [
+          {
+            key: "1",
+            label: "Approve",
+            onClick: () => handleApprove(record.id),
+          },
+          {
+            key: "2",
+            label: "Reject",
+            onClick: () => handleReject(record.id),
+          },
+          // {
+          //   key: "3",
+          //   label: "Extend Due Date",
+          //   onClick: () => handleExtendDueDate(record.id),
+          // }
+        ];
+        
+        if (isEditable) {
+          menuItems.push({
+            key: "3",
+            label: "Edit Task",
+            onClick: () => handleEditClick(record.currentTask),
+          });
+        }
+  
+        return (
+          <Dropdown menu={{ items: menuItems }}>
+            <a onClick={(e) => e.preventDefault()}>Actions</a>
+          </Dropdown>
+        );
+      },
     },
   ];
 
@@ -206,18 +239,19 @@ const AdminVolunteerList = () => {
       }
   };
   
-  const handleExtendDueDate = async (id) => {
-      try {
-          const response = await axios.put(`http://localhost:3001/api/volunteer-tasks/volunteers/${id}/extend-due-date`);
-          if (response.status === 200) {
-              message.success('Due date extended successfully');
-          }
-      }
-      catch (error) {
-          console.error('Error extending task:', error);
-          message.error('Failed to extend due date');
-      }
-  };
+  // const handleExtendDueDate = async (id) => {
+  //     try {
+  //       console.log("id", id)
+  //         const response = await axios.put(`http://localhost:3001/api/volunteer-tasks/volunteers/${id}/extend-due-date`);
+  //         if (response.status === 200) {
+  //             message.success('Due date extended successfully');
+  //         }
+  //     }
+  //     catch (error) {
+  //         console.error('Error extending task:', error);
+  //         message.error('Failed to extend due date');
+  //     }
+  // };
 
   return (
     <div>
@@ -231,7 +265,19 @@ const AdminVolunteerList = () => {
         onChange={handleTableChange}
       />
       
-      <TaskModal
+      <ExtendDueDateModal
+        isOpen={isExtendDueDateModalOpen}
+        closeModal={() => {
+          setIsExtendDueDateModalOpen(false);
+          setIsEditMode(false);
+          setSelectedTask(null);
+        }}
+        onSubmit={isEditMode ? handleEditTaskSubmit : () => {}}
+        initialTask={selectedTask}
+        isTemplateView={false}
+      />
+
+      <ExtendDueDateModal
         isOpen={isTemplateModalOpen}
         closeModal={() => setIsTemplateModalOpen(false)}
         initialTask={selectedTask}
