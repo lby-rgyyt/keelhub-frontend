@@ -28,7 +28,9 @@ import AdminDetails from "./components/AdminDetails";
 import VerifiedPage from "./components/VerifiedPage";
 import VerificationFail from "./components/VerificationFail";
 import AccountSuccess from "./components/AccountSuccess";
+import VolunteerHome from "./pages/VolunteerHome";
 import NotificationsPage from "./components/notifications/NotificationPage";
+
 
 
 function App() {
@@ -96,6 +98,20 @@ function App() {
             )
           }
         />
+
+        <Route
+          path="/volunteer-home"
+          element={
+            isLoggedIn ? (
+              <Layout>
+                <VolunteerHome />
+              </Layout>
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+
         <Route
           path="/onboarding/workflow"
           element={
