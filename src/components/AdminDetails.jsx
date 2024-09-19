@@ -1,21 +1,16 @@
-import React, { useEffect,useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { UserContext } from "../context/UserContext";
 import ReactFlagsSelect from "react-flags-select";
 import axios from "axios";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css'
 import { useNavigate } from "react-router-dom";
-
-//getting the timezones
-import {getTimezonesForCountry,} from "countries-and-timezones"
-
-//converting the timezones to PST, EST, CDT, etc.
+import { getTimezonesForCountry } from "countries-and-timezones"
 import moment from "moment-timezone";
 
-const AdminDetails = () =>{
-
+const AdminDetails = () => {
     const { currentUser } = useContext(UserContext);
-
+    const [authToken, setAuthToken] = useState('');
     const [countryList, setCountryList] = useState([]);
     const [stateList, setStateList] = useState([]);
     const [country, setCountry] = useState('');
@@ -29,48 +24,64 @@ const AdminDetails = () =>{
 
     const USA_Visa_List = ["F1","O1", "H1B", "L1","N/A"]
 
-    // TO GET THE TOKEN
-    // https://www.universal-tutorial.com/api/getaccesstoken
-    // Headers: Accept:application/json, api-token:9UE2oIs29kHP1Otm5FRiH3d1jtJ-UG_qNuoaj3UM0FFSDrZIDrnsyRQMNQkI640i0VY, user-email:kshitij.chaudhari@keelworks.org
+    const fetchAuthToken = useCallback(async () => {
+      if (authToken) return; 
+      try {
+        const response = await axios.get('/api/api/getaccesstoken', {
+          headers: {
+            "Accept": "application/json",
+            "api-token": "9UE2oIs29kHP1Otm5FRiH3d1jtJ-UG_qNuoaj3UM0FFSDrZIDrnsyRQMNQkI640i0VY",
+            "user-email": "kshitij.chaudhari@keelworks.org"
+          }
+        });
+        const newToken = `Bearer ${response.data.auth_token}`;
+        setAuthToken(newToken);
+      } catch (error) {
+        console.error('Error fetching auth token:', error);
+      }
+    }, [authToken]);
 
-    // CALL TO GET ALL COUNTRIES
-    // https://www.universal-tutorial.com/api/countries/
-    // Headers: Authorization (Bearer "the token we get from the previous api call"), Accept:application/json
-
-    let auth_token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJrc2hpdGlqLmNoYXVkaGFyaUBrZWVsd29ya3Mub3JnIiwiYXBpX3Rva2VuIjoiOVVFMm9JczI5a0hQMU90bTVGUmlIM2QxanRKLVVHX3FOdW9hajNVTTBGRlNEclpJRHJuc3lSUU1OUWtJNjQwaTBWWSJ9LCJleHAiOjE3MjYyNTgxODF9.TzQ006WioiWu5HtKaxt9WNqx2zagp1sEu58q4YNFAWg"
-
-    const FetchCountries = async() => {
-        const list_countries = await axios.get('https://www.universal-tutorial.com/api/countries/', {
-                                headers: {
-                                    'Authorization': auth_token,
-                                    'Accept': 'application/json'
-                                }
-                                })
+    const FetchCountries = useCallback(async () => {
+      if (!authToken || countryList.length > 0) return; 
+      try {
+        const list_countries = await axios.get('/api/api/countries/', {
+          headers: {
+            'Authorization': authToken,
+            'Content-Type': 'application/json'
+          }
+        });
         setCountryList(list_countries.data);
-        // console.log(list_countries.data)
-    }
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+        if (error.response && error.response.status === 401) {
+          setAuthToken(''); 
+        }
+      }
+    }, [authToken, countryList.length]);
 
-    const timezones = async() => {
-        const x = countryList.filter(c => c.country_name === country)[0];
-        const country_id = x? x.country_short_name:null;
-        const zones = getTimezonesForCountry(country_id);
-        const updated_zones = zones?.map(zone => moment.tz(zone.name).format('z'));
-        let setOfZones = new Set(updated_zones)
-        setOfZones = [...setOfZones]
-        console.log("setOfZones", setOfZones)
-        setTimezoneList(setOfZones);
-    }
+    const timezones = useCallback(() => {
+      const x = countryList.find(c => c.country_name === country);
+      const country_id = x?.country_short_name;
+      const zones = getTimezonesForCountry(country_id);
+      const updated_zones = zones?.map(zone => moment.tz(zone.name).format('z'));
+      const setOfZones = [...new Set(updated_zones)];
+      setTimezoneList(setOfZones);
+    }, [country, countryList]);
 
-    const FetchStates = async(country) => {
-        const list_states = await axios.get(`https://www.universal-tutorial.com/api/states/${country}`, {
-            headers: {
-                'Authorization': auth_token,
-                'Accept': 'application/json'
-            }
-            })
-        // console.log(list_states.data)
+    const FetchStates = useCallback(async (country) => {
+      if (!authToken || !country) return;
+      try {
+        const list_states = await axios.get(`/api/api/states/${country}`, {
+          headers: {
+            'Authorization': authToken,
+            'Accept': 'application/json'
+          }
+        });
         setStateList(list_states.data);
-    }
+      } catch (error) {
+        console.error('Error fetching states:', error);
+      }
+    }, [authToken]);
 
     const handleSubmit = async () => {
       if (country === '' || timezone === '' || phone === '' || visaType === '' || state === '') {
@@ -83,11 +94,9 @@ const AdminDetails = () =>{
             timezone,
             visa_type: visaType,
             phone,
-            hasLoggedIn:true,
+            hasLoggedIn: true,
           };
-    
           await axios.put(`http://localhost:3001/api/users/${currentUser.id}`, userData);
-    
           navigate('/acc-success');
         } catch (error) {
           console.error("Error updating user data:", error);
@@ -95,17 +104,28 @@ const AdminDetails = () =>{
       }
     };
     
+    useEffect(() => {
+      fetchAuthToken();
+      const intervalId = setInterval(fetchAuthToken, 24 * 60 * 60 * 1000);
+      return () => clearInterval(intervalId);
+    }, [fetchAuthToken]);
 
-    useEffect(()=>{
-        if(!currentUser){
-          navigate('/')
-        }
-        timezones()  
-    },[country])
-
-    useEffect(()=>{
+    useEffect(() => {
+      if (authToken) {
         FetchCountries();
-    },[])
+      }
+    }, [authToken, FetchCountries]);
+
+    useEffect(() => {
+      if (!currentUser) {
+        navigate('/');
+      }
+      if (country) {
+        timezones();
+        FetchStates(country);
+      }
+    }, [country, currentUser, navigate, timezones, FetchStates]);
+
 
     return (
         <div className="flex flex-col md:flex-row mx-auto">
@@ -145,7 +165,6 @@ const AdminDetails = () =>{
                     <select onChange={(e) => {
                       setCountry(e.target.value);
                       FetchStates(e.target.value);
-                      console.log("Country is set to: ", e.target.value);
                     }} defaultValue='default' className="block w-full rounded-md border-0 px-3.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                       <option value='default' disabled>Select..</option>
                       {countryList ? countryList.map((country) => (
@@ -229,5 +248,4 @@ const AdminDetails = () =>{
       );
 
 }
-
 export default AdminDetails;

@@ -28,6 +28,7 @@ import AdminDetails from "./components/AdminDetails";
 import VerifiedPage from "./components/VerifiedPage";
 import VerificationFail from "./components/VerificationFail";
 import AccountSuccess from "./components/AccountSuccess";
+import NotificationsPage from "./components/notifications/NotificationPage";
 
 
 function App() {
@@ -113,6 +114,18 @@ function App() {
             isLoggedIn ? (
               <Layout>
                 <VolunteerListPage />
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            isLoggedIn ? (
+              <Layout>
+                <NotificationsPage />
               </Layout>
             ) : (
               <Navigate to="/login" />
