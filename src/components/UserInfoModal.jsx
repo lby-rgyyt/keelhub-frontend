@@ -14,6 +14,7 @@ const UserInfoModal = ({
 }) => {
   const { login } = useContext(UserContext);
   const token = localStorage.getItem("token");
+  
   const [currentUser, setCurrentUser] = useState(null);
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,7 +27,6 @@ const UserInfoModal = ({
             },
           }
         );
-        console.log("current user: ", response.data);
         setCurrentUser(response.data);
         localStorage.setItem("currentUser", JSON.stringify(response.data));
       } catch (error) {
