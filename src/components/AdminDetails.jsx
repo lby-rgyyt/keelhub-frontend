@@ -37,7 +37,7 @@ const AdminDetails = () =>{
     // https://www.universal-tutorial.com/api/countries/
     // Headers: Authorization (Bearer "the token we get from the previous api call"), Accept:application/json
 
-    let auth_token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJrc2hpdGlqLmNoYXVkaGFyaUBrZWVsd29ya3Mub3JnIiwiYXBpX3Rva2VuIjoiOVVFMm9JczI5a0hQMU90bTVGUmlIM2QxanRKLVVHX3FOdW9hajNVTTBGRlNEclpJRHJuc3lSUU1OUWtJNjQwaTBWWSJ9LCJleHAiOjE3MjYyNTgxODF9.TzQ006WioiWu5HtKaxt9WNqx2zagp1sEu58q4YNFAWg"
+    let auth_token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJrc2hpdGlqLmNoYXVkaGFyaUBrZWVsd29ya3Mub3JnIiwiYXBpX3Rva2VuIjoiOVVFMm9JczI5a0hQMU90bTVGUmlIM2QxanRKLVVHX3FOdW9hajNVTTBGRlNEclpJRHJuc3lSUU1OUWtJNjQwaTBWWSJ9LCJleHAiOjE3MjY3NzMxNjV9.DfOD16YBqTLh45FKikPsmfLWShZfTtYvEFH2JyTtrzE"
 
     const FetchCountries = async() => {
         const list_countries = await axios.get('https://www.universal-tutorial.com/api/countries/', {
