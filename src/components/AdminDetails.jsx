@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getTimezonesForCountry } from "countries-and-timezones"
 import moment from "moment-timezone";
 
-const AdminDetails = () => {
+export const AdminDetails = () => {
     const { currentUser } = useContext(UserContext);
     const [authToken, setAuthToken] = useState('');
     const [countryList, setCountryList] = useState([]);
@@ -266,4 +266,5 @@ const AdminDetails = () => {
       );
 
 }
-export default AdminDetails;
+}
+export default AdminDetails
