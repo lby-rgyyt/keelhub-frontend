@@ -23,38 +23,18 @@ function Header() {
     navigate("/profile");
   };
 
+  const handleNotifications = () => {
+    navigate("/notifications");
+  };
+
   useEffect(() => {
-    // console.log(currentUser);
   }, [currentUser]);
 
   const pageName = location.pathname.split('/').filter((x) => x).map(name => name.charAt(0).toUpperCase() + name.slice(1)).join(' '); 
 
   
-
-  // const getBreadcrumbs = () => {
-  //   const pathnames = location.pathname.split('/').filter((x) => x);
-  //   return pathnames.map((name, index) => {
-  //     const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
-  //     const isLast = index === pathnames.length - 1;
-  //     return (
-  //       <li key={name}>
-  //         {isLast ? (
-  //           <span className="text-gray-500">{name.charAt(0).toUpperCase() + name.slice(1)}</span>
-  //         ) : (
-  //           <>
-  //             <a href={routeTo} className="text-blue-600 hover:text-blue-800">
-  //               {name.charAt(0).toUpperCase() + name.slice(1)}
-  //             </a>
-  //             <span className="mx-2">/</span>
-  //           </>
-  //         )}
-  //       </li>
-  //     );
-  //   });
-  // };
-
   return (
-    <header className="flex justify-between min-w-full bg-white " style={{
+    <header className="flex justify-between min-w-full bg-white" style={{
       borderBottomWidth: "1px"
     }}>
       <div className="flex items-center justify-center p-4 ">
@@ -62,7 +42,10 @@ function Header() {
       </div>
       <div className="flex gap-4  p-4 items-center">
         <div className="flex gap-4">
-          <button className="text-gray-500 hover:text-gray-700">
+          <button 
+            className="text-gray-500 hover:text-gray-700"
+            onClick={handleNotifications}
+          >
             <FiBell className="h-6 w-6" />
           </button>
           {notificationCount > 0 && (
