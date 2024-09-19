@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getTimezonesForCountry } from "countries-and-timezones"
 import moment from "moment-timezone";
 
-const AdminDetails = () => {
+export const AdminDetails = () => {
     const { currentUser } = useContext(UserContext);
     const [authToken, setAuthToken] = useState('');
     const [countryList, setCountryList] = useState([]);
@@ -34,14 +34,7 @@ const AdminDetails = () => {
 
     let auth_token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJrc2hpdGlqLmNoYXVkaGFyaUBrZWVsd29ya3Mub3JnIiwiYXBpX3Rva2VuIjoiOVVFMm9JczI5a0hQMU90bTVGUmlIM2QxanRKLVVHX3FOdW9hajNVTTBGRlNEclpJRHJuc3lSUU1OUWtJNjQwaTBWWSJ9LCJleHAiOjE3MjY3NzMxNjV9.DfOD16YBqTLh45FKikPsmfLWShZfTtYvEFH2JyTtrzE"
 
-    const FetchCountries = async() => {
-        const list_countries = await axios.get('https://www.universal-tutorial.com/api/countries/', {
-                                headers: {
-                                    'Authorization': auth_token,
-                                    'Accept': 'application/json'
-                                }
-                                })
-
+                              
     const fetchAuthToken = useCallback(async () => {
       if (authToken) return; 
       try {
@@ -76,7 +69,6 @@ const AdminDetails = () => {
         }
       }
     }, [authToken, countryList.length]);
-
     const timezones = useCallback(() => {
       const x = countryList.find(c => c.country_name === country);
       const country_id = x?.country_short_name;
@@ -266,4 +258,4 @@ const AdminDetails = () => {
       );
 
 }
-export default AdminDetails;
+export default AdminDetails
