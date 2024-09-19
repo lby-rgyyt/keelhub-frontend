@@ -9,6 +9,7 @@ function Header() {
   const location = useLocation();
   const { isLoggedIn, currentUser, logout } = useContext(UserContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [profilePicture, setProfilePicture] = useState("");
 
   const handleLogout = () => {
     logout();
@@ -20,12 +21,14 @@ function Header() {
   };
 
   useEffect(() => {
-    // console.log(currentUser);
+    console.log(currentUser);
+    let imageUrl = currentUser.profile_pic;
+    if (currentUser.fileobj) {
+      imageUrl = `data:${currentUser.fileobj.fileType};base64,${currentUser.fileobj.fileData}`;
+    }
+
+    setProfilePicture(imageUrl);
   }, [currentUser]);
-
-  const pageName = location.pathname.split('/').filter((x) => x).map(name => name.charAt(0).toUpperCase() + name.slice(1)).join(' '); 
-
-  
 
   // const getBreadcrumbs = () => {
   //   const pathnames = location.pathname.split('/').filter((x) => x);
@@ -50,12 +53,12 @@ function Header() {
   // };
 
   return (
-    <header className=" shadow-sm fixed w-full z-10" style={{ left: "280px" }}>
+    <header className=" shadow-sm fixed w-full z-10" style={{ left: "1100px" }}>
+      {" "}
       {/* Adjusted left position */}
-      <div className="max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
-      <div className="flex items-center justify-between">
-      {pageName}
-
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        {/* <div className="flex items-center justify-between"> */}
+        <div className="flex items-center">
           <nav className="flex" aria-label="Breadcrumb">
             {/* <ol className="flex items-center space-x-4"> */}
             {/* <li>
@@ -64,6 +67,8 @@ function Header() {
               {getBreadcrumbs()}
             </ol> */}
           </nav>
+
+          {/* <div className="flex items-center space-x-4"> */}
           <div className="flex items-center space-x-4">
             <button className="text-gray-500 hover:text-gray-700">
               <HiOutlineBell className="h-6 w-6" />
@@ -75,7 +80,7 @@ function Header() {
               >
                 <img
                   className="h-8 w-8 rounded-full object-cover"
-                  src={currentUser.profile_pic || defaultUser}
+                  src={profilePicture || defaultUser}
                   alt={currentUser.first_name}
                 />
                 <span>

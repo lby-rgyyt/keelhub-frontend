@@ -13,6 +13,7 @@ import VolunteerInfoModal from "../components/VolunteerInfoModal";
 
 const Dashboard = () => {
   const { currentUser } = useContext(UserContext);
+  const [profilePicture, setProfilePicture] = useState("");
 
   const [showUserInfoModal, setShowUserInfoModal] = useState(false);
   const [showVolunteerInfoModal, setShowVolunteerInfoModal] = useState(false);
@@ -30,6 +31,13 @@ const Dashboard = () => {
         setSecond(true);
       }
     }
+
+    let imageUrl = currentUser.profile_pic;
+    if (currentUser.fileobj) {
+      imageUrl = `data:${currentUser.fileobj.fileType};base64,${currentUser.fileobj.fileData}`;
+    }
+
+    setProfilePicture(imageUrl);
   }, [currentUser]);
 
   if (!currentUser) {
@@ -60,7 +68,7 @@ const Dashboard = () => {
                     <div className="flex-shrink-0">
                       <img
                         className="mx-auto h-20 w-20 rounded-full"
-                        src={currentUser.profilePic || defaultProfile}
+                        src={profilePicture || defaultProfile}
                         alt=""
                       />
                     </div>
