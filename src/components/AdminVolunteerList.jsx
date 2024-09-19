@@ -131,23 +131,12 @@ const AdminVolunteerList = () => {
       title: "Current Task",
       dataIndex: "currentTask",
       key: "currentTask",
-      width: 450,
       render: (currentTask) => (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {currentTask ? (
+        <div>
+          {selectedTask ? (
             <>
-              <div>
-                <div>{currentTask.task_name}</div>
-                <div>{currentTask.progress}</div>
-              </div>
-              <button
-                className="text-gray-500 hover:text-gray-700"
-                onClick={() => handleTemplateClick(currentTask)}
-                title="View Description"
-                style={{paddingRight:'50px'}}
-              >
-                <HiOutlineClipboardList size={20} />
-              </button>
+              <div>{selectedTask.taskName}</div>
+              <div>{selectedTask.progress}</div>
             </>
           ) : (
             "No active task"
@@ -160,6 +149,21 @@ const AdminVolunteerList = () => {
       dataIndex: ["currentTask", "createdAt"],
       key: "createdAt",
       render: (date) => (date ? new Date(date).toLocaleDateString() : "N/A"),
+    },
+    {
+      title: "Template",
+      dataIndex: ["currentTask", "description"],
+      key: "description",
+      render: (description) =>
+        (
+          <button
+            className="text-gray-500 hover:text-gray-700"
+            onClick={() => handleTemplateClick(selectedTask)}
+            title="View Template"
+          >
+            <HiOutlineTemplate size={20} />
+          </button>
+        ) || "N/A",
     },
     {
       title: "Actions",

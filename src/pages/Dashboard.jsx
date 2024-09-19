@@ -20,6 +20,7 @@ import { rejectTask, approveTask, deleteTask } from "../utils/updateTaskStatus";
 
 const Dashboard = () => {
   const { currentUser } = useContext(UserContext);
+  const [profilePicture, setProfilePicture] = useState("");
   const [showToast, setShowToast] = useState(true);
   const [selectedColumn, setSelectedColumn] = useState(0);
   const [volunteers, setVolunteers] = useState([]);
@@ -148,7 +149,14 @@ const Dashboard = () => {
     if (currentUser) {
       loadVolunteers();
     }
-  }, [currentUser, showToast]);
+
+    let imageUrl = currentUser.profile_pic;
+    if (currentUser.fileobj) {
+      imageUrl = `data:${currentUser.fileobj.fileType};base64,${currentUser.fileobj.fileData}`;
+    }
+
+    setProfilePicture(imageUrl);
+  }, [currentUser]);
 
   if (!currentUser) {
     return <Navigate to="/" />;
