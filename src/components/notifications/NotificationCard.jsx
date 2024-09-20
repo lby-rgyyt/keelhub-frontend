@@ -2,10 +2,37 @@ import React from "react";
 import axios from "axios";
 import { Menu } from '@headlessui/react';
 
+const renderMessageWithLinks = (message, links) => {
+  if (!links || Object.keys(links).length === 0) {
+    return message;
+  }
+
+  const parts = message.split(/(\s+)/);
+  return parts.map((part, index) => {
+    const lowerPart = part.toLowerCase();
+    if (links[lowerPart]) {
+      return (
+        <a
+          key={index}
+          href={links[lowerPart]}
+          className="text-blue-600 hover:underline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+};
+
 const NotificationCard = ({ notification, onUpdate }) => {
   const handleMarkAsRead = async () => {
     try {
-      await axios.patch(`http://localhost:3001/api/notifications/${notification.id}/mark-read`);
+      await axios.put(`http://localhost:3001/api/notifications/${notification.id}/`, {
+        status: "read"
+      });
       onUpdate();
     } catch (error) {
       console.error('Error in marking as read:', error);
@@ -23,6 +50,8 @@ const NotificationCard = ({ notification, onUpdate }) => {
     }
   };
 
+  const links = notification.metadata?.links || {};
+
   return (
     <div className="flex items-center justify-between p-4 bg-white rounded-lg shadow mb-2">
       <div className="flex items-center space-x-3">
@@ -34,9 +63,16 @@ const NotificationCard = ({ notification, onUpdate }) => {
           />
         )}
         <div>
-          <p className="text-sm text-gray-800">{notification.message}</p>
+          <p className="text-sm text-gray-800">
+            {renderMessageWithLinks(notification.message, links)}
+          </p>
           {notification.metadata && notification.metadata.action_url && (
-            <a href={notification.metadata.action_url} className="text-sm text-blue-600 hover:underline">
+            <a 
+              href={notification.metadata.action_url} 
+              className="text-sm text-blue-600 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {notification.metadata.action_text || 'View'}
             </a>
           )}
