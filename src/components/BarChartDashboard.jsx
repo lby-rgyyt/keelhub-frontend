@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
     Card,
     CardContent,
@@ -6,19 +6,20 @@ import {
     CardHeader,
     CardTitle
 } from "../components/CardComponents"
+import { fetchJobTitleWithCount } from "../services/fetchJobTitleWithCount"
 
-const chartData = [
-    { category: "Program Manager", count: 45 },
-    { category: "Software Engineer", count: 80 },
-    { category: "Quality Assurance", count: 30 },
-    { category: "Fundraising/Grant", count: 25 },
-    { category: "Human Resources", count: 20 },
-    { category: "Marketing", count: 35 },
-    { category: "Data Analyst", count: 40 },
-    { category: "Project Coordinator", count: 50 },
-    { category: "Graphic Designer", count: 15 },
-    { category: "Content Writer", count: 30 }
-]
+// const chartData = [
+//     { category: "Program Manager", count: 45 },
+//     { category: "Software Engineer", count: 80 },
+//     { category: "Quality Assurance", count: 30 },
+//     { category: "Fundraising/Grant", count: 25 },
+//     { category: "Human Resources", count: 20 },
+//     { category: "Marketing", count: 35 },
+//     { category: "Data Analyst", count: 40 },
+//     { category: "Project Coordinator", count: 50 },
+//     { category: "Graphic Designer", count: 15 },
+//     { category: "Content Writer", count: 30 }
+// ]
 
 const chartConfig = {
     count: {
@@ -27,10 +28,33 @@ const chartConfig = {
     },
 }
 
+
 export default function VolunteerCategoriesChart() {
+    const [volunteerCount, setVolunteerCount] = useState([]);
+    const [chartData, setChartData] = useState([]);
     const [activeIndex, setActiveIndex] = useState(-1)
     const maxValue = Math.max(...chartData.map(item => item.count));
     const totalVolunteers = chartData.reduce((sum, item) => sum + item.count, 0);
+
+    useEffect(() => {
+        const loadData = async () => {
+            try{
+                const countData = await fetchJobTitleWithCount();
+                console.log(countData);
+                setVolunteerCount(countData);
+
+                const fetchedData = countData.data.map(item => ({
+                    category: item.title,
+                    count: item.volunteer_count
+                }));
+                setChartData(fetchedData);
+
+            } catch (error) {
+                console.error('Error fetching volunteer count:', error);
+            }
+        };
+        loadData();
+    },[])
 
     return (
         <Card>
@@ -42,7 +66,7 @@ export default function VolunteerCategoriesChart() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="flex h-64 gap-4 overflow-scroll items-end">
+                <div className="flex h-64 gap-3 overflow-scroll items-end">
                     {chartData.map((item, index) => (
                         <div
                             onMouseEnter={() => setActiveIndex(index)}
