@@ -59,15 +59,16 @@ const AdminDetails = () => {
         country: '',
         state: '',
         timezone: '',
-        visaType: '',
+        visa_extension: '',
         phone: ''
     });
     const [timezoneList, setTimezoneList] = useState([]);
     const [compulsory, setCompulsory] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
-    const USA_Visa_List = ["F1", "O1", "H1B", "L1", "N/A"];
+    const USA_Visa_List = ["OPT", "CPT", "N/A"];
 
     const fetchCountries = useCallback(async () => {
         if (!authToken || countryList.length > 0) return;
@@ -121,14 +122,31 @@ const AdminDetails = () => {
     }, [authToken, fetchAuthToken]);
 
     const handleInputChange = (field, value) => {
-        setFormData(prev => ({ ...prev, [field]: value }));
+        setFormData(prev => {
+            const newData = { ...prev, [field]: value };
+            console.log("New form data:", newData);
+            return newData;
+        });
         if (field === 'country') {
             fetchStates(value);
         }
+        setErrors(prev => ({ ...prev, [field]: '' }));
+        setCompulsory(false);
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+        Object.entries(formData).forEach(([key, value]) => {
+            if (!value || value.trim() === '') {
+                newErrors[key] = 'This field is required';
+            }
+        });
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = async () => {
-        if (Object.values(formData).some(value => value === '')) {
+        if (!validateForm()) {
             setCompulsory(true);
             return;
         }
@@ -136,6 +154,7 @@ const AdminDetails = () => {
         try {
             const userData = {
                 ...formData,
+                visa_type: formData.visa_extension,
                 hasLoggedIn: true,
             };
             await axios.put(`http://localhost:3001/api/users/${currentUser.id}`, userData, {
@@ -251,11 +270,13 @@ const AdminDetails = () => {
                             </div>
                         </div>
                         <div className="sm:col-span-2">
-                            <label className="block text-sm font-semibold leading-1 text-gray-900">USA Visa Type *</label>
+                            <label htmlFor="visa_extension" className="block text-sm font-semibold leading-1 text-gray-900">Visa Extension *</label>
                             <div className="mt-2">
                                 <select
-                                    onChange={(e) => handleInputChange('visaType', e.target.value)}
-                                    value={formData.visaType}
+                                    id="visa_extension"
+                                    name="visa_extension"
+                                    onChange={(e) => handleInputChange('visa_extension', e.target.value)}
+                                    value={formData.visa_extension || ''}
                                     className="block w-full rounded-md border-0 px-3.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 >
                                     <option value="">Select..</option>
@@ -266,6 +287,7 @@ const AdminDetails = () => {
                                     ))}
                                 </select>
                             </div>
+                        {errors.visa_extension && <p className="text-red-500 text-xs mt-1">{errors.visa_extension}</p>}
                         </div>
                         <div className="sm:col-span-2">
                             <label className="block text-sm font-semibold leading-1 text-gray-900">Phone number *</label>
