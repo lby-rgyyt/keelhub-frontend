@@ -72,7 +72,6 @@ const AdminDetails = () => {
     const fetchCountries = useCallback(async () => {
         if (!authToken || countryList.length > 0) return;
         setIsLoading(true);
-        console.log(authToken);
         try {
             const response = await axios.get('/api/api/countries/', {
                 headers: {
@@ -171,10 +170,6 @@ const AdminDetails = () => {
             fetchStates(formData.country);
         }
     }, [formData.country, currentUser, navigate, updateTimezones, fetchStates]);
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
 
     return (
         <div className="flex flex-col md:flex-row mx-auto">
