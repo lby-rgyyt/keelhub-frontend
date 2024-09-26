@@ -11,18 +11,22 @@ function Header() {
   const [notificationCount, setNotificationCount] = useState(4);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const getProfilePicSrc = () => {
+    if (!currentUser?.profile_pic) return defaultUser;
+    return currentUser.profile_pic_type === 'google' ? currentUser.profile_pic : `http://localhost:3001${currentUser.profile_pic}`;
+  };
+
   const handleLogout = () => {
     logout();
+    setIsDropdownOpen(false);
     navigate("/");
   };
 
   const handleProfile = () => {
+    setIsDropdownOpen(false);
     navigate("/profile");
   };
-
-  const handleNotifications = () => {
-    navigate("/notifications");
-  };
+  const handleNotifications = () => navigate("/notifications");
 
   return (
     <header className="flex justify-between items-center min-w-full bg-white border-b">
@@ -51,11 +55,11 @@ function Header() {
           >
             <img
               className="h-8 w-8 rounded-full object-cover"
-              src={currentUser.profile_pic || defaultUser}
-              alt={currentUser.first_name}
+              src={getProfilePicSrc()}
+              alt={currentUser?.first_name}
             />
             <span>
-              {currentUser.first_name} {currentUser.last_name}
+              {currentUser?.first_name} {currentUser?.last_name}
             </span>
             <HiChevronDown className="h-4 w-4" />
           </button>
