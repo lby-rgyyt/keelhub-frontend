@@ -1,71 +1,28 @@
-import React, { useState, useContext, useEffect } from "react";
-import UserInfoModal from "./UserInfoModal";
-import VolunteerInfoModal from "./VolunteerInfoModal";
-import { UserContext} from "../context/UserContext";
-import { FaPencilAlt, FaUserEdit } from "react-icons/fa";
+import React, { useState, useContext, useEffect, useCallback } from "react";
+import { UserContext } from "../context/UserContext";
+import { FaPencilAlt } from "react-icons/fa";
 import img from "../assets/defaultUser.jpg";
 import Modal from "react-modal";
-import { FileUploader } from "react-drag-drop-files";
 import { useDropzone } from 'react-dropzone';
 import axios from "axios";
 import { formatPhoneNumber } from "../utils/phoneFormatter";
+import Cropper from 'react-easy-crop';
+import UserInfoModal from "./UserInfoModal";
 
 const Profile = () => {
   const { currentUser, updateUserProfilePic } = useContext(UserContext);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [volunteerInfo, setVolunteerInfo] = useState(null);
-  const [userInfo, setUserInfo] = useState({
-    ...currentUser,
-    profile_pic_type: currentUser.profile_pic_type || 'google'
-  });
+  const [userInfo, setUserInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
-  const [file, setFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
-  const fileTypes = ["JPG", "PNG", "GIF"];
-
-  const {getRootProps, getInputProps} = useDropzone({
-    accept: {
-      'image/jpeg': [],
-      'image/png': [],
-      'image/gif': [],
-    },
-    onDrop: acceptedFiles => {
-      setFile(acceptedFiles.map(file => Object.assign(file, {
-        preview: URL.createObjectURL(file)
-      })));
-    }
-  });
-
-  const handleUserSave = () => {
-    setMessage("User info saved successfully");
-  };
-
-  const handleVolunteerSave = () => {
-    setMessage("Volunteer info saved successfully");
-  };
-
-  const handleOpenUserModal = () => {
-    setIsUserModalOpen(true);
-  };
-
-  const handleCloseUserModal = () => {
-    setIsUserModalOpen(false);
-  };
-
-  const handleOpenVolunteerModal = () => {
-    setIsVolunteerModalOpen(true);
-  };
-
-  const handleCloseVolunteerModal = () => {
-    setIsVolunteerModalOpen(false);
-  };
-
-  const getProfilePicSrc = () => {
-    if (!userInfo.profile_pic) return img;
-    if (userInfo.profile_pic_type === 'google') return userInfo.profile_pic;
-    return `http://localhost:3001${userInfo.profile_pic}`; 
-  };
+  
+  const [imageSrc, setImageSrc] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
   const fetchVolunteerInfo = async () => {
     try {
@@ -80,23 +37,86 @@ const Profile = () => {
 
   useEffect(() => {
     if (currentUser) {
-      setUserInfo(currentUser);
+      setUserInfo({
+        ...currentUser,
+        profile_pic_type: currentUser.profile_pic_type || 'google'
+      });
+      setIsLoading(false);
+      
+      if (currentUser.role === 'volunteer') {
+        fetchVolunteerInfo();
+      }
     }
   }, [currentUser]);
 
-  useEffect(() => {
-    if (currentUser && currentUser.role === 'volunteer') {
-      fetchVolunteerInfo();
-    }
-  }, [currentUser]);
+  const onDrop = useCallback((acceptedFiles) => {
+    const file = acceptedFiles[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImageSrc(reader.result);
+    };
+    reader.readAsDataURL(file);
+  }, []);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: {
+      'image/jpeg': [],
+      'image/png': [],
+      'image/gif': [],
+    },
+    multiple: false
+  });
+
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  const createImage = (url) =>
+    new Promise((resolve, reject) => {
+      const image = new Image();
+      image.addEventListener('load', () => resolve(image));
+      image.addEventListener('error', (error) => reject(error));
+      image.setAttribute('crossOrigin', 'anonymous');
+      image.src = url;
+    });
+
+  const getCroppedImg = async (imageSrc, pixelCrop) => {
+    const image = await createImage(imageSrc);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = pixelCrop.width;
+    canvas.height = pixelCrop.height;
+
+    ctx.drawImage(
+      image,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      pixelCrop.width,
+      pixelCrop.height
+    );
+
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        resolve(blob);
+      }, 'image/jpeg');
+    });
+  };
 
   const uploadImage = async () => {
-    if (!file) return;
+    if (!imageSrc) return;
     setIsUploading(true);
-    const formData = new FormData();
-    formData.append("profile_pic", file[0]);
-  
+    
     try {
+      const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
+      const formData = new FormData();
+      formData.append("profile_pic", croppedImage, 'cropped_profile_pic.jpg');
+
       const response = await axios.post(
         `http://localhost:3001/api/users/${currentUser.id}/profile-picture`,
         formData,
@@ -106,7 +126,7 @@ const Profile = () => {
           },
         }
       );
-  
+
       if (response.data.message === "Profile picture updated successfully") {
         updateUserProfilePic(response.data.profile_pic, 'custom');
         setMessage("Image uploaded successfully");
@@ -117,8 +137,22 @@ const Profile = () => {
     } finally {
       setIsUploading(false);
       setImageModalOpen(false);
-      setFile(null);
+      setImageSrc(null);
     }
+  };
+
+  const getProfilePicSrc = () => {
+    if (!userInfo.profile_pic) return img;
+    if (userInfo.profile_pic_type === 'google') return userInfo.profile_pic;
+    return `http://localhost:3001${userInfo.profile_pic}`; 
+  };
+
+  const handleOpenUserModal = () => {
+    setIsUserModalOpen(true);
+  };
+
+  const handleCloseUserModal = () => {
+    setIsUserModalOpen(false);
   };
 
   function formatDate(timestamp) {
@@ -127,37 +161,9 @@ const Profile = () => {
     return date.toLocaleDateString("en-US", options);
   }
 
-  // Copyconst handleSyncWithGoogle = async () => {
-  //   try {
-  //     setIsUploading(true);
-  //     const response = await axios.post(
-  //       `http://localhost:3001/api/users/${currentUser.id}/sync-google-picture`,
-  //       {},
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  
-  //     if (response.data.success) {
-  //       setUserInfo(prevState => ({
-  //         ...prevState,
-  //         profile_pic: response.data.profile_pic,
-  //         profile_pic_type: 'google'
-  //       }));
-  //       setMessage("Profile picture synced with Google successfully");
-  //     } else {
-  //       setMessage("Error syncing with Google profile picture");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error syncing with Google profile picture", error);
-  //     setMessage("Error syncing with Google profile picture");
-  //   } finally {
-  //     setIsUploading(false);
-  //     setImageModalOpen(false);
-  //   }
-  // };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="profile-container">
@@ -181,15 +187,15 @@ const Profile = () => {
             <button
               onClick={() => {
                 setImageModalOpen(false);
-                setFile(null)
+                setImageSrc(null);
               }}
               className="text-2xl -mt-2 text-gray-500 hover:text-gray-700"
             >
               &times;
             </button>
           </div>
-          <div className="flex items-center mb-6 border-2 border-dashed rounded justify-center min-h-80">
-            {file == null ? 
+          <div className="flex items-center mb-6 border-2 border-dashed rounded justify-center" style={{ height: '400px' }}>
+            {!imageSrc ? 
               <div {...getRootProps({className: 'dropzone'})}>
                 <input {...getInputProps()} />
                 <p className="text-center font-bold pb-2">Select a file or drag and drop here</p>
@@ -200,30 +206,50 @@ const Profile = () => {
                   </button>
                 </p>
               </div> 
-              : <img style={{maxHeight:"38vh"}} src={file[0].preview} alt="Preview" />
+              : 
+              <div className="relative w-full h-full">
+                <Cropper
+                  image={imageSrc}
+                  crop={crop}
+                  zoom={zoom}
+                  aspect={1}
+                  onCropChange={setCrop}
+                  onZoomChange={setZoom}
+                  onCropComplete={onCropComplete}
+                />
+              </div>
             }
           </div>
-          {isUploading && <p>Uploading...</p>}
-          {message && <p>{message}</p>}
-          {file != null && 
-            <div className="flex justify-end">
-              <button 
-                className="bg-white text-red-700 font-semibold px-4 mr-2 border border-red-500 rounded" 
-                onClick={() => setFile(null)}
-              >
-                Upload another image
-              </button>
-              <button 
-                className="bg-blue-700 py-2 px-4 text-white rounded" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  uploadImage();
-                }}
-              >
-                Confirm
-              </button>
+          {imageSrc && 
+            <div className="flex justify-between items-center mt-4">
+              <input
+                type="range"
+                value={zoom}
+                min={1}
+                max={3}
+                step={0.1}
+                aria-labelledby="Zoom"
+                onChange={(e) => setZoom(parseFloat(e.target.value))}
+                className="w-1/3"
+              />
+              <div>
+                <button 
+                  className="bg-white text-red-700 font-semibold px-4 mr-2 border border-red-500 rounded" 
+                  onClick={() => setImageSrc(null)}
+                >
+                  Upload another image
+                </button>
+                <button 
+                  className="bg-blue-700 py-2 px-4 text-white rounded" 
+                  onClick={uploadImage}
+                >
+                  Confirm
+                </button>
+              </div>
             </div>
           }
+          {isUploading && <p>Uploading...</p>}
+          {message && <p>{message}</p>}
         </div>
       </Modal>
 
@@ -233,7 +259,7 @@ const Profile = () => {
             <div className="relative inline-block">
               <img
                 src={getProfilePicSrc()}
-                alt={currentUser?.first_name}
+                alt={userInfo?.first_name}
                 className="w-24 h-24 rounded-full mr-6"
               />
               <div
@@ -246,14 +272,14 @@ const Profile = () => {
             <div className="flex justify-between items-center mb-2">
               <div>
                 <h2 className="text-2xl font-semibold">
-                  {currentUser.first_name} {currentUser.last_name}
+                  {userInfo.first_name} {userInfo.last_name}
                 </h2>
-                <h3>{currentUser.username}</h3>
+                <h3>{userInfo.username}</h3>
               </div>
             </div>
           </div>
           <div>
-            <p>Start Date: {formatDate(currentUser.created_at)}</p>
+            <p>Start Date: {formatDate(userInfo.created_at)}</p>
           </div>
         </div>
         <div className="p-6">
@@ -272,41 +298,41 @@ const Profile = () => {
             <div>
               <p className="mb-1 text-slate-500">Full Name</p>
               <p className="font-semibold">
-                {currentUser.first_name} {currentUser.last_name}
+                {userInfo.first_name} {userInfo.last_name}
               </p>
             </div>
             <div>
               <p className="mb-1 text-slate-500">Role</p>
-              <p className="font-semibold"> {currentUser.role} </p>
+              <p className="font-semibold"> {userInfo.role} </p>
             </div>
             <div>
               <p className="mb-1 text-slate-500">Agreed Hours</p>
               <p className="font-semibold">
-                {currentUser.role === 'admin' ? 'N/A' : 
+                {userInfo.role === 'admin' ? 'N/A' : 
                   volunteerInfo ? `${volunteerInfo.time_committed_per_week} /Week` : 'Loading...'}
               </p>
             </div>
             <div>
               <p className="mb-1 text-slate-500">Phone Number</p>
-              <p className="font-semibold">{formatPhoneNumber(currentUser.phone)}</p>
+              <p className="font-semibold">{formatPhoneNumber(userInfo.phone)}</p>
             </div>
           </div>
           <div className="grid grid-cols-4 gap-4 text-sm py-6">
             <div>
               <p className="mb-1 text-slate-500">Country of Residence</p>
-              <p className="font-semibold"> {currentUser.country} </p>
+              <p className="font-semibold"> {userInfo.country} </p>
             </div>
             <div>
               <p className="mb-1 text-slate-500">State/Province</p>
-              <p className="font-semibold"> {currentUser.state} </p>
+              <p className="font-semibold"> {userInfo.state} </p>
             </div>
             <div>
               <p className="mb-1 text-slate-500">Timezone</p>
-              <p className="font-semibold"> {currentUser.timezone} </p>
+              <p className="font-semibold"> {userInfo.timezone} </p>
             </div>
             <div>
-              <p className="mb-1 text-slate-500">USA Visa Type</p>
-              <p className="font-semibold"> {currentUser.visa_type} </p>
+              <p className="mb-1 text-slate-500">Visa Extension</p>
+              <p className="font-semibold"> {userInfo.visa_type} </p>
             </div>
           </div>
         </div>
