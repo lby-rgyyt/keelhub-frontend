@@ -8,6 +8,7 @@ const TwoFactorSetUp = () =>  {
     const[token2FA, setToken2FA] = useState("");
     const[secret,setSecret] = useState('');
     const navigate = useNavigate();
+    const [error, setError] = useState(false);
 
     let {currentUser} = useContext(UserContext)
 
@@ -32,10 +33,10 @@ const TwoFactorSetUp = () =>  {
           currentUser
         }); 
 
-        // console.log("response",response)
+        console.log("response",response)
         navigate('/admin-details',{replace:true})
       }catch(e){
-        console.log(e);
+        setError(true);
       }
     }
 
@@ -76,7 +77,7 @@ const TwoFactorSetUp = () =>  {
                 <img className="pl-4 pt-2 ml-1" src={qrimg} alt="QR"></img>
                 <div>
                   <p className="text-gray-400 pt-5">Or enter this code if you can't scan the QR code</p>
-                  <p className="text-sm text-gray-400 mt-5">- TBD</p>
+                  <p className="text-sm text-gray-400 mt-5">- {secret}</p>
                 </div>
             </div>
 
@@ -87,8 +88,9 @@ const TwoFactorSetUp = () =>  {
             <p className='pl-4 pt-4 ml-1 mt-5 font-bold'>3. Enter Verification Code:</p>
             <p className="pl-4 pt-2 mb-2 ml-1 text-gray-500">Enter the 6-digit code from the Google Authenticator app</p>
             <input type="number" onChange={(e)=>{setToken2FA(e.target.value)}} name="code" id="code" placeholder='Verification Code' className="block w-[350px] rounded-md border-0 py-2 pl-2 ml-4 text-gray-900 shadow-sm ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+            {error && error ? <div> Invalid Token</div> : null}
             <button onClick={handleVerify} className="flex w-[200px] ml-[450px] justify-center py-auto rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Verify Code</button>
-            
+
           </div>
         </div>
       </div>
