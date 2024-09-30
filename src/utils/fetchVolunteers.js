@@ -1,6 +1,5 @@
 import axios from "axios";
-export const fetchVolunteers = async (userId, userRole, fetchAll = false) => {
-    const pageSize = fetchAll ? 0 : 10; // If fetchAll is true, set pageSize to 0 to fetch all entries
+export const fetchVolunteers = async (userId, userRole) => {
     const API_BASE_URL = "http://localhost:3001/api/volunteer-tasks"
     try {
         let url;
@@ -12,13 +11,7 @@ export const fetchVolunteers = async (userId, userRole, fetchAll = false) => {
             throw new Error('Invalid user role');
         }
 
-        const response = await axios.get(url, {
-            params: {
-                userId,
-                userRole,
-                pageSize
-            },
-        });
+        const response = await axios.get(url);
         const filteredVolunteers = response.data.data.filter(volunteer => volunteer.currentTask);
         console.log(filteredVolunteers)
         return filteredVolunteers;
