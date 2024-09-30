@@ -72,7 +72,8 @@ const TwoFactorSetUp = () =>  {
             </div>
 
             <p className='pl-4 pt-4 ml-1 mt-5 font-bold'>2. Scan the QR Code:</p>
-            <p className="pl-4 pt-2 mb-2 ml-1 text-gray-500">Open the Google Authenticator and scan the QR code</p>
+            <p className="pl-4 pt-2 mb-2 ml-1 text-gray-500">Use the Google Authenticator App or Google Authenticator Extension to scan the QR code</p>
+            <a href="https://chromewebstore.google.com/detail/authenticator/bhghoamapcdpbohphigoooaddinpkbai?hl=en"className="pl-5 text-blue-500 hover:underline" target="_blank">Download Google Authenticator Extension</a>
             <div className="flex space-x-[60px]">
                 <img className="pl-4 pt-2 ml-1" src={qrimg} alt="QR"></img>
                 <div>
