@@ -89,7 +89,7 @@ const TwoFactorSetUp = () =>  {
             <p className='pl-4 pt-4 ml-1 mt-5 font-bold'>3. Enter Verification Code:</p>
             <p className="pl-4 pt-2 mb-2 ml-1 text-gray-500">Enter the 6-digit code from the Google Authenticator app</p>
             <input type="number" onChange={(e)=>{setToken2FA(e.target.value)}} name="code" id="code" placeholder='Verification Code' className="block w-[350px] rounded-md border-0 py-2 pl-2 ml-4 text-gray-900 shadow-sm ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-            {error && error ? <div> Invalid Token</div> : null}
+            {error && error ? <div className="text-red-500 pl-5"> Invalid code!</div> : null}
             <button onClick={handleVerify} className="flex w-[200px] ml-[450px] justify-center py-auto rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Verify Code</button>
 
           </div>
