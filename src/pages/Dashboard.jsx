@@ -226,7 +226,7 @@ const Dashboard = () => {
               setActiveRow(-1);
               setSelectedColumn(0)
             }}>
-              Pending Reviews
+              Pending Review
             </button>
             <button className={`flex w-48 justify-start items-center border-b-2 ${selectedColumn === 1 && "border-blue-600 text-blue-600"}`} onClick={() => {
               setSelectedColumn(1)
@@ -339,7 +339,7 @@ const Dashboard = () => {
                   </div>
                 </td>
                 <td className="flex flex-1 items-center min-w-44">
-                  {volunteer.currentTask.status === "Pending Approval" ?
+                  {volunteer.currentTask.status === "Pending Review" ?
                     <span className=" bg-[#FFDDB5] text-[#FF8A00] rounded-md  border-[#FF8A00] px-2 py-1 bg-opacity-55" style={{
                       borderWidth: "1px",
                     }}>{volunteer.currentTask.status}</span>
