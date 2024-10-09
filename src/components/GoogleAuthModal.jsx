@@ -7,7 +7,13 @@ const GoogleAuthModal = ({closeModal}) =>{
     const[secret, setSecret] = useState("");
 
     const loadQR = async() =>{
-        let response = await axios.post("http://localhost:3001/api/auth/generate2fa");
+        let secret = JSON.parse(localStorage.getItem("currentUser"))
+        let secretBase32 = secret.secret_2fa
+        
+        let response = await axios.post("http://localhost:3001/api/auth/generate2fa",{
+          secretBase32
+        });
+        
         setQrimg(response.data.qrCode)
         setSecret(response.data.secret)
         // console.log(response.data.qrCode);
