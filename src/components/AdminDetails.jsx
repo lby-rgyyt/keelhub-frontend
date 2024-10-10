@@ -247,6 +247,7 @@ const AdminDetails = () => {
                                     ))}
                                 </select>
                             </div>
+                            {errors.country && <p className="text-red-500 text-xs mt-1">{errors.country}</p>}
                         </div>
                         <div>
                             <label className="block text-sm font-semibold leading-1 text-gray-900">State/Province *</label>
@@ -264,6 +265,7 @@ const AdminDetails = () => {
                                     ))}
                                 </select>
                             </div>
+                            {errors.state && <p className="text-red-500 text-xs mt-1">{errors.state}</p>}
                         </div>
                         <div className="sm:col-span-2">
                             <label className="block text-sm font-semibold leading-1 text-gray-900">Timezone *</label>
@@ -281,6 +283,7 @@ const AdminDetails = () => {
                                     ))}
                                 </select>
                             </div>
+                            {errors.timezone && <p className="text-red-500 text-xs mt-1">{errors.timezone}</p>}
                         </div>
                         <div className="sm:col-span-2">
                             <label htmlFor="visa_extension" className="block text-sm font-semibold leading-1 text-gray-900">Visa Extension *</label>
@@ -311,6 +314,7 @@ const AdminDetails = () => {
                                     onChange={(value) => handleInputChange('phone', value)}
                                 />
                             </div>
+                            {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                         </div>
 
                         {/* Keelworks Start Date Field */}

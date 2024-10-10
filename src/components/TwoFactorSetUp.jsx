@@ -2,6 +2,8 @@ import React, { useContext, useEffect,useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { FaCopy } from 'react-icons/fa'; // If using react-icons
 
 const TwoFactorSetUp = () =>  {
     const [qrimg, setQrimg] = useState("");
@@ -12,6 +14,12 @@ const TwoFactorSetUp = () =>  {
 
     let {currentUser} = useContext(UserContext)
 
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = () => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // Reset copied status after 2 seconds
+    };
     // console.log("currentUser",currentUser.username);
     // console.log("secret",secret);
 
@@ -67,18 +75,29 @@ const TwoFactorSetUp = () =>  {
             <p className='pl-4 pt-4 ml-1 mt-5 font-bold'>1. Download Google Authenticator:</p>
             <p className="pl-4 pt-2 mb-2 ml-1 text-gray-500">Download the app onto your mobile device</p>
             <div className="flex space-x-[60px] text-xs pl-5 mt-5">
-                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_US" className="text-blue-500 hover:underline" target="_blank">Download for Android</a>
-                <a href="https://apps.apple.com/us/app/google-authenticator/id388497605" target="_blank" className="text-blue-500 hover:underline">Download for iOS</a>
+                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_US" className="text-blue-500 underline hover:underline" target="_blank">Download for Android</a>
+                <a href="https://apps.apple.com/us/app/google-authenticator/id388497605" target="_blank" className="text-blue-500 underline">Download for iOS</a>
             </div>
 
             <p className='pl-4 pt-4 ml-1 mt-5 font-bold'>2. Scan the QR Code:</p>
             <p className="pl-4 pt-2 mb-2 ml-1 text-gray-500">Use the Google Authenticator App or Google Authenticator Extension to scan the QR code</p>
-            <a href="https://chromewebstore.google.com/detail/authenticator/bhghoamapcdpbohphigoooaddinpkbai?hl=en"className="pl-5 text-blue-500 hover:underline" target="_blank">Download Google Authenticator Extension</a>
-            <div className="flex space-x-[60px]">
-                <img className="pl-4 pt-2 ml-1" src={qrimg} alt="QR"></img>
+            <a href="https://chromewebstore.google.com/detail/authenticator/bhghoamapcdpbohphigoooaddinpkbai?hl=en"className=" underline  pl-5 text-blue-500 hover:underline" target="_blank">Download Google Authenticator Extension</a>
+            <div className="grid text-center">
+                <img className="pl-[150px] pt-2 ml-1 " src={qrimg} alt="QR"></img>
                 <div>
                   <p className="text-gray-400 pt-5">Or enter this code if you can't scan the QR code</p>
-                  <p className="text-sm text-gray-400 mt-5">- {secret}</p>
+                  <div className="flex items-center justify-center mt-5">
+                    <p className="text-sm text-black font-bold flex-col">
+                      {secret}
+                    </p>
+                    <CopyToClipboard text={secret} onCopy={handleCopy}>
+                      <button aria-label="Copy to clipboard" className="ml-[10px]">
+                        <FaCopy className="text-gray-400 hover:text-gray-600" />
+                      </button>
+                    </CopyToClipboard>
+                    
+                  </div>
+                  {copied && <span className="text-sm text-green-500 ml-2">Copied!</span>}
                 </div>
             </div>
 
