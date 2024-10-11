@@ -26,7 +26,15 @@ function Header() {
     setIsDropdownOpen(false);
     navigate("/profile");
   };
-  const handleNotifications = () => navigate("/notifications");
+
+  const handleNotifications = () => {
+    navigate("/notifications");
+  };
+  const imageUrl = currentUser.fileobj
+    ? `data:${currentUser.fileobj.fileType};base64,${currentUser.fileobj.fileData}`
+    : currentUser.profile_pic || defaultUser;
+  
+  console.log("currentUser", currentUser);
 
   return (
     <header className="flex justify-between items-center min-w-full bg-white border-b">
@@ -55,12 +63,12 @@ function Header() {
           >
             <img
               className="h-8 w-8 rounded-full object-cover"
-              src={getProfilePicSrc()}
-              alt={currentUser?.first_name}
+              src={imageUrl || src/assets/defaultProfile.png}
+              alt={currentUser.first_name}
             />
-            <span>
-              {currentUser?.first_name} {currentUser?.last_name}
-            </span>
+            {/* <span>
+              {currentUser.first_name} {currentUser.last_name}
+            </span> */}
             <HiChevronDown className="h-4 w-4" />
           </button>
           {isLoggedIn && isDropdownOpen && (
