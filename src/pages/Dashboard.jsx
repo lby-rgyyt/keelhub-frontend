@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useMemo } from "react";
+import React, { useContext, useEffect, useState, useMemo, useRef } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -8,6 +8,7 @@ import { UserContext } from "../context/UserContext";
 import { fetchVolunteers } from "../utils/fetchVolunteers"
 import { FaTrashAlt } from "react-icons/fa";
 import { MdOutlineEdit } from "react-icons/md";
+import { TbDeviceTabletCheck } from "react-icons/tb";
 import UpdateStatusModal from "../components/UpdateStatusModal";
 import DeleteConfirmationModal from "../components/DeleteVolunteerStatusModal";
 import AddVolunteerModalStep1 from "../components/addVolunteer/AddVolunteerStep1"
@@ -36,6 +37,10 @@ const Dashboard = () => {
   const [first, setFirst] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const menuRef = useRef(null);
+  const [sortOrder, setSortOrder] = useState(null);
+  const [sortOrderDate, setSortOrderDate] = useState(null);
 
   const handleAccessLevel = (role) => {
     if (role === "HR") return "2";
@@ -81,6 +86,11 @@ const Dashboard = () => {
     /// add volunteer here
   };
 
+  const handleAccept = async (volunteer) => {
+    setSelectedVolunteer(volunteer.id)
+    await handleAcceptStatus();
+  }
+
   const handleUpdate = (volunteer) => {
     setSelectedVolunteer(volunteer.id); // Store the selected volunteer in state
     setIsUpdateModalOpen(true);
@@ -110,6 +120,18 @@ const Dashboard = () => {
     filteredVolunteers.filter(volunteer => volunteer.id !== selectedVolunteer);
     setSelectedVolunteer(null);
   };
+
+  const handleAcceptStatus = async () => {
+    const task_to_accept = currentVolunteers.find(volunteer => volunteer.id === selectedVolunteer).currentTask.taskId
+    try{
+      await approveTask(task_to_accept);
+    } catch (e) {
+      console.log(`error: ${e}`)
+    }
+    setActiveRow(-1);
+    filteredVolunteers.filter(volunteer => volunteer.id !== selectedVolunteer);
+    setSelectedVolunteer(null);
+  }
 
   const handleDeleteStatus = async () => {
     const task_to_delete = currentVolunteers.find(volunteer => volunteer.id === selectedVolunteer).currentTask.taskId
@@ -145,6 +167,7 @@ const Dashboard = () => {
 
       } catch (error) {
         console.error('Error loading volunteers:', error);
+        setErrorMessage('Please try again later');
       }
     };
 
@@ -159,6 +182,19 @@ const Dashboard = () => {
 
     setProfilePicture(imageUrl);
   }, [currentUser]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setActiveRow(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuRef]);
 
   if (!currentUser) {
     return <Navigate to="/" />;
@@ -212,6 +248,29 @@ const Dashboard = () => {
     return 'N/A';
 
   }
+
+  const sortByFirstName = () => {
+    let sortedVolunteers;
+    if (sortOrder === 'asc') {
+      sortedVolunteers = [...filteredVolunteers].sort((a, b) => a.firstName.localeCompare(b.firstName));
+      setSortOrder('desc');
+    } else {
+      sortedVolunteers = [...filteredVolunteers].sort((a, b) => b.firstName.localeCompare(a.firstName));
+      setSortOrder('asc');
+    }
+    setFilteredVolunteers(sortedVolunteers);
+  };
+  const sortByStatusChangeDate = (order) => {
+    let sortedVolunteers;
+    if (order === 'latest') {
+      sortedVolunteers = [...filteredVolunteers].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+      setSortOrderDate('latest');
+    } else {
+      sortedVolunteers = [...filteredVolunteers].sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt));
+      setSortOrderDate('earliest');
+    }
+    setFilteredVolunteers(sortedVolunteers);
+  };
 
   return (
     <div className="flex flex-col -mt-6">
@@ -269,10 +328,14 @@ const Dashboard = () => {
               <th className="flex p-3 min-w-56 font-semibold text-gray-600 flex-1 text-center  items-center hover:text-gray-900 gap-3 ">
                 Name
                 <div className="flex flex-col p-2 gap-1" >
-                  <button>
+                  <button
+                    onClick={() => sortByFirstName('asc')}
+                  >
                     <span className="flex  flex-col justify-start max-h-4 ">⏶</span>
                   </button>
-                  <button>
+                  <button
+                    onClick={() => sortByFirstName('desc')}
+                  >
                     <span className="flex  flex-col   justify-end max-h-3 ">⏷</span>
                   </button>
                 </div>
@@ -286,10 +349,14 @@ const Dashboard = () => {
               <th className="flex p-3 font-semibold text-gray-600 flex-1 text-center min-w-56 items-center hover:text-gray-900 gap-3 ">
                 {selectedColumn === 1 ? "Due Date" : "Status Change Date"}
                 <div className="flex flex-col p-2 gap-1" >
-                  <button>
+                  <button
+                    onClick={() => sortByStatusChangeDate('earliest')}
+                  >
                     <span className="flex  flex-col justify-start max-h-4 ">⏶</span>
                   </button>
-                  <button>
+                  <button
+                    onClick={() => sortByStatusChangeDate('latest')}
+                  >
                     <span className="flex  flex-col   justify-end max-h-3 ">⏷</span>
                   </button>
                 </div>
@@ -298,7 +365,7 @@ const Dashboard = () => {
                 Task
 
               </th>
-              <th className="flex p-3 font-semibold text-gray-600 flex-1 text-center  items-center hover:text-gray-900 gap-0  min-w-28">
+              <th className="flex p-3 font-semibold text-gray-600 flex-1 text-center items-center hover:text-gray-900 gap-3  min-w-28">
                 Date Created
                 <div className="flex flex-col p-2 gap-1" >
                   <button>
@@ -315,8 +382,14 @@ const Dashboard = () => {
           <tbody className="flex flex-1 flex-col overflow-scroll">
             {filteredVolunteers?.length === 0 && 
               <div className="flex flex-1 justify-center items-center">
-                {selectedColumn === 0 && filteredVolunteers?.length === 0 && "No pending review tasks to show at the moment"}
-                {selectedColumn === 1 && filteredVolunteers?.length === 0 && "No past due tasks to show at the moment"}
+                {errorMessage ? (
+                  <div className="error-message text-xl">{errorMessage}</div>
+                ) : (
+                  <>
+                    {selectedColumn === 0 && filteredVolunteers?.length === 0 && "No pending review tasks at the moment"}
+                    {selectedColumn === 1 && filteredVolunteers?.length === 0 && "No past due tasks to show at the moment"}
+                  </>
+                )}
               </div>
             }
             {currentVolunteers?.map((volunteer, index) => (
@@ -359,7 +432,7 @@ const Dashboard = () => {
                   <span className="text-sm">{volunteer.currentTask.task_name}</span>
                 </td>
                 <td className="flex flex-1 pl-4 items-center max-w-52">{returnFilteredDate(new Date(volunteer.createdAt))}</td>
-                <td className="flex justify-center flex-1 items-center max-w-40" >
+                <td className="flex justify-center flex-1 items-center max-w-40 relative" >
                   {activeRow !== index ? (<button
                     onClick={() => {
                       setActiveRow(index);
@@ -370,13 +443,21 @@ const Dashboard = () => {
                     ...
                   </button>
                   ) : (
-                    <span className=" flex flex-col min-w-40 items-center justify-center  bg-white shadow-md rounded-md z-100">
+                    <span ref={menuRef} className="z-50 mt-16 flex flex-col min-w-40 items-center justify-center align-center bg-white shadow-md rounded-md">
+                      <span className="flex gap-2 p-2  hover:bg-gray-100 w-full items-center border-b border-gray-200">
+                        <TbDeviceTabletCheck />
+                        <button
+                          onClick={() => handleAccept(volunteer)}
+                        >
+                          Accept
+                        </button>
+                      </span>
                       <span className="flex gap-2 p-2  hover:bg-gray-100 w-full items-center border-b border-gray-200">
                         <MdOutlineEdit />
                         <button
                           onClick={() => handleUpdate(volunteer)}
                         >
-                          Update Status
+                          Request Revision
                         </button>
                       </span>
                       <span className="flex gap-2 p-2  hover:bg-gray-100 w-full items-center text-red-500 ">
@@ -395,7 +476,7 @@ const Dashboard = () => {
           </tbody>
         </table>
       </div>
-      <div className="flex flex-1 pl-4 pt-4 pb-4">
+      <div className="flex flex-1 pl-4 pt-4 pb-4 overflow-x-auto">
         <BarChartDashboard />
       </div>
       <UpdateStatusModal
