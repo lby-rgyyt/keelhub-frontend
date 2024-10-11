@@ -11,12 +11,19 @@ function Header() {
   const [notificationCount, setNotificationCount] = useState(4);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const getProfilePicSrc = () => {
+    if (!currentUser?.profile_pic) return defaultUser;
+    return currentUser.profile_pic_type === 'google' ? currentUser.profile_pic : `http://localhost:3001${currentUser.profile_pic}`;
+  };
+
   const handleLogout = () => {
     logout();
+    setIsDropdownOpen(false);
     navigate("/");
   };
 
   const handleProfile = () => {
+    setIsDropdownOpen(false);
     navigate("/profile");
   };
 
