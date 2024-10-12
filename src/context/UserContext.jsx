@@ -30,11 +30,12 @@ export const UserProvider = ({ children }) => {
     setIsLoggedIn(false);
   };
 
-  const updateUserProfilePic = (newProfilePicUrl, newProfilePicType) => {
+  const updateUserProfilePic = (newProfilePicUrl, newProfilePicType , newisimageUploaded) => {
     const updatedUser = {
       ...currentUser,
       profile_pic: newProfilePicUrl,
-      profile_pic_type: newProfilePicType
+      profile_pic_type: newProfilePicType,
+      is_image_uploaded : newisimageUploaded,
     };
     setCurrentUser(updatedUser);
     localStorage.setItem("currentUser", JSON.stringify(updatedUser));

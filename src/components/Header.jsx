@@ -32,7 +32,7 @@ function Header() {
   };
   const imageUrl = currentUser.fileobj
     ? `data:${currentUser.fileobj.fileType};base64,${currentUser.fileobj.fileData}`
-    : currentUser.profile_pic || defaultUser;
+    : `http://localhost:3001${currentUser.profile_pic}` || defaultUser;
   
   console.log("currentUser", currentUser);
 
