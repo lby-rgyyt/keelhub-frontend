@@ -75,7 +75,7 @@ const ProjectResources = ({ projectId }) => {
 
   const sortByCreateDate = () => {
     let newOrder;
-    if (dateSort) {
+    if (createDateSort) {
       newOrder = [...files].sort((a, b) => {
         const dateA = new Date(a.created_at);
         const dateB = new Date(b.created_at);
