@@ -38,7 +38,7 @@ const Volunteer = (props) => {
             >
               {volunteer.first_name} {volunteer.last_name}
             </Link>
-            <div className="text-sm text-gray-600">{volunteer.email}</div>
+            <div className="text-sm text-gray-600">{volunteer.username}</div>
           </div>
         </div>
       </td>

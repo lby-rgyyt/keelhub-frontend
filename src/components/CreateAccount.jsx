@@ -5,7 +5,6 @@ import Modal from "react-modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 Modal.setAppElement("#root");
 
 const CreateAccount = ({ isOpen, onClose }) => {
@@ -125,9 +124,10 @@ const CreateAccount = ({ isOpen, onClose }) => {
         }
       );
       console.log("new user: ", response.data);
+      // console.log("new user id: ", response.data.user.id);
       if (formData.role === "volunteer") {
         const newVolunteer = {
-          volunteer_id: response.data.data.id,
+          volunteer_id: response.data.user.id,
           skills: [],
         };
         const response2 = await axios.post(
