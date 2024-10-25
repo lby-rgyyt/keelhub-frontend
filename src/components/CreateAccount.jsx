@@ -172,11 +172,30 @@ const CreateAccount = ({ isOpen, onClose }) => {
             >
               First Name:
             </label>
+            {/* <input
+              type="text"
+              id="first_name"
+              value={formData.first_name}
+              onChange={handleChange}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            /> */}
             <input
               type="text"
               id="first_name"
               value={formData.first_name}
               onChange={handleChange}
+              onBlur={(e) => {
+                // Clear input if it only contains whitespace
+                if (e.target.value.trim() === "") {
+                  setFormData({
+                    ...formData,
+                    first_name: "",
+                  });
+                }
+              }}
+              pattern="\S+.*" // At least one non-whitespace character
+              title="Please enter at least one non-whitespace character"
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
@@ -188,11 +207,30 @@ const CreateAccount = ({ isOpen, onClose }) => {
             >
               Last Name:
             </label>
+            {/* <input
+              type="text"
+              id="last_name"
+              value={formData.last_name}
+              onChange={handleChange}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            /> */}
             <input
               type="text"
               id="last_name"
               value={formData.last_name}
               onChange={handleChange}
+              onBlur={(e) => {
+                // Clear input if it only contains whitespace
+                if (e.target.value.trim() === "") {
+                  setFormData({
+                    ...formData,
+                    last_name: "",
+                  });
+                }
+              }}
+              pattern="\S+.*" // At least one non-whitespace character
+              title="Please enter at least one non-whitespace character"
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
