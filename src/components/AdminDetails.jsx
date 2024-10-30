@@ -9,6 +9,7 @@ import { getTimezonesForCountry } from "countries-and-timezones"
 import moment from "moment-timezone";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {phone} from 'phone';
 
 const useAuthToken = () => {
   const [authToken, setAuthToken] = useState('');
@@ -153,6 +154,12 @@ const AdminDetails = () => {
                 newErrors[key] = 'This field is required';
             }
         });
+
+        let {isValid} = phone(`+${formData.phone}`,{country:null})
+        
+        if(!isValid){
+            newErrors['phone'] = "Enter a valid phone number"
+        }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -337,8 +344,8 @@ const AdminDetails = () => {
                     <label className="block text-sm font-semibold leading-1 text-gray-900">Agreed Hours per Week *</label>
                     <div className="mt-1">
                         <input
-                            type="string"
-                            min="1"
+                            type="number"
+                            min="1" max="100" step="1"
                             placeholder="Enter hours"
                             value={formData.agreed_hours_per_week}
                             onChange={(e) => handleInputChange('agreed_hours_per_week', e.target.value)}
